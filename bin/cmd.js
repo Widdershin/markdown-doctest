@@ -11,10 +11,8 @@ var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
 var DEFAULT_GLOB = '**/*.+(md|markdown)';
 var DEFAULT_IGNORE = ['node_modules/**'];
 
-process.stdin.setEncoding('utf8');
-
-process.stdin.on('readable', function () {
-  var filesToTest = process.stdin.read();
+function main () {
+  var userGlob = process.argv[2];
 
   if (fs.existsSync(CONFIG_FILEPATH)) {
     try {
@@ -25,12 +23,12 @@ process.stdin.on('readable', function () {
     }
   }
 
-  if (filesToTest === null) {
-    glob(DEFAULT_GLOB, {ignore: DEFAULT_IGNORE}, run);
-  } else {
-    run(null, filesToTest.split('\n'));
-  }
-});
+  glob(
+    userGlob || DEFAULT_GLOB,
+    {ignore: DEFAULT_IGNORE},
+    run
+  );
+}
 
 function run (err, files) {
   if (err) {
@@ -39,3 +37,5 @@ function run (err, files) {
 
   doctest.printResults(doctest.runTests(files));
 }
+
+main();
