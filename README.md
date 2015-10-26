@@ -61,9 +61,11 @@ I plan on adding features to mitigate the above problems, including the ability 
 
 Currently, `markdown-doctest` only supports javascript, and you have to make sure you write your examples like this:
 
-\`\`\`js
-console.log("Hello world");
-\`\`\`
+
+    ```js
+    console.log("Hello world");
+    ```
+
 
 Note the `js` after the three backticks. That's what's used to find examples to run (and by Github to determine syntax highlighting). It looks like this:
 
