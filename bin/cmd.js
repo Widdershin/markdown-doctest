@@ -5,7 +5,10 @@ var doctest = require('../src/doctest');
 var fs = require('fs');
 var process = require('process');
 
+var glob = require('glob');
+
 var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
+var DEFAULT_GLOB = '!(node_modules)/**/*.+(md|markdown)';
 
 process.stdin.setEncoding('utf8');
 
@@ -21,7 +24,18 @@ process.stdin.on('readable', function () {
     }
   }
 
-  if (filesToTest !== null) {
-    doctest.printResults(doctest.runTests(filesToTest.split('\n')));
+  if (filesToTest === null) {
+    glob(DEFAULT_GLOB, run);
+  } else {
+    filesToTest = filesToTest.split('\n');
+    run(filesToTest);
   }
 });
+
+function run (err, files) {
+  if (err) {
+    console.trace(err);
+  }
+
+  doctest.printResults(doctest.runTests(files));
+}

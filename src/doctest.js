@@ -25,7 +25,7 @@ function parseCodeSnippets (args) {
   var codeSnippets = contents.split('\n').reduce((snippets, line, index) => {
     var lastSnippet = last(snippets);
 
-    if (line.trim() === '```js') {
+    if (line.trim().match(/```\W*js/)) {
       snippets.lastComplete = false;
       return snippets.concat({code: '', lineNumber: index + 1, fileName});
     }
