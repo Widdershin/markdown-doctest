@@ -4,7 +4,7 @@
   "description": "Test all the code in your markdown docs!",
   "main": "src/doctest.js",
   "bin": {
-    "markdown-doctest": "src/doctest.js"
+    "markdown-doctest": "bin/cmd.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/Widdershin/markdown-doctest/issues"
   },
-  "homepage": "https://github.com/Widdershin/markdown-doctest"
+  "homepage": "https://github.com/Widdershin/markdown-doctest",
+  "devDependencies": {
+    "tape": "^4.2.2"
+  }
 }

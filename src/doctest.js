@@ -1,36 +1,16 @@
-#! /usr/bin/env node
 'use strict';
 
 var fs = require('fs');
 var process = require('process');
 
-var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
-
-process.stdin.setEncoding('utf8');
-
-process.stdin.on('readable', function () {
-  var filesToTest = process.stdin.read();
-
-  if (fs.existsSync(CONFIG_FILEPATH)) {
-    try {
-      Object.assign(global, require(CONFIG_FILEPATH));
-    } catch (e) {
-      console.log('Error running setup:');
-      console.trace(e);
-    }
-  }
-
-  if (filesToTest !== null) {
-    var results = filesToTest
-      .split('\n')
-      .filter(fileName => fileName !== '')
-      .map(read)
-      .map(parseCodeSnippets)
-      .map(testFile);
-
-    printResults(flattenArray(results));
-  }
-});
+function runTests (files) {
+  return flattenArray(files
+    .filter(fileName => fileName !== '')
+    .map(read)
+    .map(parseCodeSnippets)
+    .map(testFile)
+  );
+}
 
 function read (fileName) {
   return {contents: fs.readFileSync(fileName, 'utf8'), fileName};
@@ -160,3 +140,4 @@ function markDownErrorLocation (result) {
   }
 }
 
+module.exports = {printResults, runTests};
