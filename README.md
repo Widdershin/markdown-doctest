@@ -8,14 +8,14 @@ Well, I don't know about you, but I write a lot of code examples in markdown. So
 
 I also don't always stop to make sure that the code I write in my documentation *actually works*.
 
-That seems like an important step, but it's often missed out, especially when you're just making a small change to somebody else's docs.
+That seems like an important step, but it's very easy to forget, especially when I'm just making a small change to somebody else's docs.
 
-Okay, so we want our examples to at least run, that seems reasonable. How?
+Okay, but it's not like you can just automatically run the code.
 ---
 
-Well, that's where `markdown-doctest` comes into play.
+Well, with `markdown-doctest`, you can!
 
-Just `npm install markdown-doctest` and run `find . -name '*.md' | markdown-doctest`. It scans your directory for `.md` files, extracts the code examples and then runs them.
+Just `npm install markdown-doctest` and run `find . -name '*.md' | markdown-doctest`. It will run all of the Javascript code examples tucked away in your markdown, and let you know if any blow up.
 
 Let's try it on this repo!
 
