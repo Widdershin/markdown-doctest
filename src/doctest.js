@@ -103,15 +103,14 @@ function printResults (results) {
   var totalTestCount = results.length;
   var passingCount = results.filter(result => result.success).length;
 
-  console.log(`${passingCount} passed out of ${totalTestCount} run.`);
+  console.log(`${passingCount}/${totalTestCount} passing`);
 
   process.exit(totalTestCount === passingCount ? 0 : 127);
 }
 
 function printFailure (result) {
-  console.log(`FAILURE: ${result.codeSnippet.fileName}:${result.codeSnippet.lineNumber}`);
+  console.log(`Failed - ${markDownErrorLocation(result)}`);
   console.log(relevantStackDetails(result.stack));
-  console.log('');
 }
 
 function cleanUpSnippet (codeSnippet) {
@@ -123,13 +122,30 @@ function cleanUpSnippet (codeSnippet) {
 }
 
 function relevantStackDetails (stack) {
-  var match = stack.match(/([\w\W]*)at eval/) ||
-    stack.match(/([\w\W]*)at [\w*\/]*doctest.js/);
+  var match = stack.match(/([\w\W]*?)at eval/) ||
+    stack.match(/([\w\W]*)at [\w*\/]*?doctest.js/);
 
   if (match !== null) {
     return match[1];
   }
 
   return stack;
+}
+
+function markDownErrorLocation (result) {
+  var stackLines = result.stack.split('\n');
+
+  var evalStackLines = stackLines.filter(line => line.match(/eval/));
+
+  if (evalStackLines.length !== 0) {
+    var match = evalStackLines[0].match(/<.*>:(\d+):(\d+)/);
+
+    var mdLineNumber = parseInt(match[1], 10);
+    var columnNumber = parseInt(match[2], 10);
+
+    var lineNumber = result.codeSnippet.lineNumber + mdLineNumber;
+
+    return `${result.codeSnippet.fileName}:${lineNumber}:${columnNumber}`;
+  }
 }
 
