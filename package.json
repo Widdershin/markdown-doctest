@@ -1,0 +1,27 @@
+{
+  "name": "markdown-doctest",
+  "version": "0.0.1",
+  "description": "Test all the code in your markdown docs!",
+  "main": "src/doctest.js",
+  "bin": {
+    "markdown-doctest": "src/doctest.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Widdershin/markdown-doctest.git"
+  },
+  "keywords": [
+    "markdown",
+    "test",
+    "documentation"
+  ],
+  "author": "Nick Johnstone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Widdershin/markdown-doctest/issues"
+  },
+  "homepage": "https://github.com/Widdershin/markdown-doctest"
+}
