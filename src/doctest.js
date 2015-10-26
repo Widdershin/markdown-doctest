@@ -1,7 +1,7 @@
 'use strict';
 
-var fs = require('fs');
-var process = require('process');
+let fs = require('fs');
+let process = require('process');
 
 function runTests (files) {
   return flattenArray(files
@@ -16,13 +16,13 @@ function read (fileName) {
   return {contents: fs.readFileSync(fileName, 'utf8'), fileName};
 }
 
-var isStartOfSnippet = line => line.trim().match(/```\W*js/);
-var isEndOfSnippet = line => line.trim() === '```';
+let isStartOfSnippet = line => line.trim().match(/```\W*js/);
+let isEndOfSnippet = line => line.trim() === '```';
 
 function parseCodeSnippet (fileName) {
   return function parseCodeSnippetLine (snippets, line, index) {
-    var lastSnippet = snippets[snippets.length - 1];
-    var lastSnippetIsStillParsing = _ => lastSnippet && !snippets.lastComplete;
+    let lastSnippet = snippets[snippets.length - 1];
+    let lastSnippetIsStillParsing = _ => lastSnippet && !snippets.lastComplete;
 
     if (isStartOfSnippet(line)) {
       snippets.lastComplete = false;
@@ -45,10 +45,10 @@ function parseCodeSnippet (fileName) {
 }
 
 function parseCodeSnippets (args) {
-  var contents = args.contents;
-  var fileName = args.fileName;
+  let contents = args.contents;
+  let fileName = args.fileName;
 
-  var codeSnippets = contents
+  let codeSnippets = contents
     .split('\n')
     .reduce(parseCodeSnippet(fileName), []);
 
@@ -63,20 +63,20 @@ function ignorePseudocode (snippet) {
 }
 
 function testFile (args) {
-  var codeSnippets = args.codeSnippets;
-  var fileName = args.fileName;
+  let codeSnippets = args.codeSnippets;
+  let fileName = args.fileName;
 
-  var results = codeSnippets.map(test(fileName));
+  let results = codeSnippets.map(test(fileName));
 
   return flattenArray(results);
 }
 
 function test (filename) {
   return (codeSnippet) => {
-    var success = false;
-    var stack;
+    let success = false;
+    let stack;
 
-    var oldLog = console.log;
+    let oldLog = console.log;
 
     console.log = () => null;
 
@@ -102,8 +102,8 @@ function printResults (results) {
     .filter(result => !result.success)
     .forEach(printFailure);
 
-  var totalTestCount = results.length;
-  var passingCount = results.filter(result => result.success).length;
+  let totalTestCount = results.length;
+  let passingCount = results.filter(result => result.success).length;
 
   console.log(`${passingCount}/${totalTestCount} passing`);
 
@@ -124,7 +124,7 @@ function cleanUpSnippet (codeSnippet) {
 }
 
 function relevantStackDetails (stack) {
-  var match = stack.match(/([\w\W]*?)at eval/) ||
+  let match = stack.match(/([\w\W]*?)at eval/) ||
     stack.match(/([\w\W]*)at [\w*\/]*?doctest.js/);
 
   if (match !== null) {
@@ -135,17 +135,17 @@ function relevantStackDetails (stack) {
 }
 
 function markDownErrorLocation (result) {
-  var stackLines = result.stack.split('\n');
+  let stackLines = result.stack.split('\n');
 
-  var evalStackLines = stackLines.filter(line => line.match(/eval/));
+  let evalStackLines = stackLines.filter(line => line.match(/eval/));
 
   if (evalStackLines.length !== 0) {
-    var match = evalStackLines[0].match(/<.*>:(\d+):(\d+)/);
+    let match = evalStackLines[0].match(/<.*>:(\d+):(\d+)/);
 
-    var mdLineNumber = parseInt(match[1], 10);
-    var columnNumber = parseInt(match[2], 10);
+    let mdLineNumber = parseInt(match[1], 10);
+    let columnNumber = parseInt(match[2], 10);
 
-    var lineNumber = result.codeSnippet.lineNumber + mdLineNumber;
+    let lineNumber = result.codeSnippet.lineNumber + mdLineNumber;
 
     return `${result.codeSnippet.fileName}:${lineNumber}:${columnNumber}`;
   }

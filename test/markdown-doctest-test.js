@@ -1,21 +1,23 @@
-var path = require('path');
+'use strict';
 
-var test = require('tape');
+let path = require('path');
 
-var doctest = require('../src/doctest');
+let test = require('tape');
 
-var getTestFilePath = (testFile) => {
+let doctest = require('../src/doctest');
+
+let getTestFilePath = (testFile) => {
   return path.join(__dirname, '/test_files/', testFile);
 };
 
 test('simple pass', (t) => {
   t.plan(1);
 
-  var results = doctest.runTests([
+  let results = doctest.runTests([
     'pass.md'
   ].map(getTestFilePath));
 
-  var passingResults = results.filter(result => result.success);
+  let passingResults = results.filter(result => result.success);
 
   t.equal(passingResults.length, 1);
 });
@@ -23,12 +25,12 @@ test('simple pass', (t) => {
 test('failure', (t) => {
   t.plan(2);
 
-  var results = doctest.runTests([
+  let results = doctest.runTests([
     'fail-with-text.md'
   ].map(getTestFilePath));
 
-  var passingResults = results.filter(result => result.success);
-  var failingResults = results.filter(result => !result.success);
+  let passingResults = results.filter(result => result.success);
+  let failingResults = results.filter(result => !result.success);
 
   t.equal(passingResults.length, 0);
   t.equal(failingResults.length, 1);
