@@ -57,6 +57,16 @@ Because even though all of that can go wrong, it's still nice to know that your 
 
 `markdown-doctest` is not a replacement for your test suite. It's designed to run with your CI build and give you peace of mind that all of your examples are at least vaguely runnable.
 
+You can `require` any needed modules or example helpers in `.markdown-doctest-setup.js`. E.g:
+
+```js
+module.exports = {
+  Rx: require('rx')
+}
+```
+
+Anything exported by `.markdown-doctest-setup` will be available in all examples run.
+
 I plan on adding features to mitigate the above problems, including the ability to disable testing examples that aren't actually runnable!
 
 Currently, `markdown-doctest` only supports javascript, and you have to make sure you write your examples like this:
