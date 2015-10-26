@@ -34,7 +34,7 @@ $ find . -name '*.md' | markdown-doctest
 Failed - README.md:27:17
 ReferenceError: c is not defined
 
-0/1 passing
+1/2 passing
 ```
 
 Awesome! No excuse for broken documentation ever again right?
