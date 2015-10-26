@@ -8,7 +8,8 @@ var process = require('process');
 var glob = require('glob');
 
 var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
-var DEFAULT_GLOB = '!(node_modules)/**/*.+(md|markdown)';
+var DEFAULT_GLOB = '**/*.+(md|markdown)';
+var DEFAULT_IGNORE = ['node_modules/**'];
 
 process.stdin.setEncoding('utf8');
 
@@ -25,10 +26,9 @@ process.stdin.on('readable', function () {
   }
 
   if (filesToTest === null) {
-    glob(DEFAULT_GLOB, run);
+    glob(DEFAULT_GLOB, {ignore: DEFAULT_IGNORE}, run);
   } else {
-    filesToTest = filesToTest.split('\n');
-    run(filesToTest);
+    run(null, filesToTest.split('\n'));
   }
 });
 
