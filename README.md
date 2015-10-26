@@ -38,12 +38,13 @@ Note: `markdown-doctest` doesn't actually attempt to provide any guarantee that 
 
 `markdown-doctest` is not a replacement for your test suite. It's designed to run with your CI build and give you peace of mind that all of your examples are at least vaguely runnable.
 
-Set up logic
+Setup logic
 ---
 
 You can `require` any needed modules or example helpers in `.markdown-doctest-setup.js`. E.g:
 
 ```js
+// .markdown-doctest-setup.js
 module.exports = {
   Rx: require('rx')
 }
