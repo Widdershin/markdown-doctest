@@ -27,5 +27,8 @@
   "devDependencies": {
     "glob": "^5.0.15",
     "tape": "^4.2.2"
+  },
+  "dependencies": {
+    "glob": "^5.0.15"
   }
 }
