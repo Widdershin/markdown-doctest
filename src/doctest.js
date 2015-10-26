@@ -116,11 +116,11 @@ function printFailure (result) {
 }
 
 function cleanUpSnippet (codeSnippet) {
-  codeSnippet.code = codeSnippet.code
+  let code = codeSnippet.code
     .replace('```js', '')
     .replace('```', '');
 
-  return codeSnippet;
+  return Object.assign({}, codeSnippet, {code});
 }
 
 function relevantStackDetails (stack) {
