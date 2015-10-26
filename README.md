@@ -4,18 +4,12 @@ Test all the code in your markdown docs!
 Why on earth?
 ---
 
-Well, I don't know about you, but I write a lot of code examples in markdown. Some projects write all their documentation as markdown, like [RxJS](https://github.com/Reactive-Extensions/RxJS).
-
-I also don't always stop to make sure that the code I write in my documentation *actually works*.
-
-That seems like an important step, but it's very easy to forget, especially when I'm just making a small change to somebody else's docs.
-
-Okay, but it's not like you can just automatically run the code.
----
-
-Well, with `markdown-doctest`, you can!
+As an open source developer, there are few things more embarassing than a user opening an issue to inform you that your README example is broken! With  `markdown-doctest`, you can rest easy knowing that your example code is *actually runnable*.
 
 Just `npm install markdown-doctest` and run `find . -name '*.md' | markdown-doctest`. It will run all of the Javascript code examples tucked away in your markdown, and let you know if any blow up.
+
+Okay, how do I use it?
+---
 
 Let's try it on this repo!
 
@@ -39,35 +33,29 @@ ReferenceError: c is not defined
 
 Awesome! No excuse for broken documentation ever again right?
 
-Aren't there tons of problems with that approach?
----
+Note: `markdown-doctest` doesn't actually attempt to provide any guarantee that your code worked, only that it didn't explode in a horrible fashion. If you would like to use `markdown-doctest` for actually testing the correctness of your code, you can add some `assert`s to your examples.
 
-Why yes! Yes, there are. Here are some of the things that can go wrong:
-
- * Examples often assume they have access to variables or modules that aren't actually there
- * Some examples mix code and pseudo code, which results in syntax errors!
- * Examples might run just fine while producing the wrong result. `markdown-doctest` won't even blink
-
-`markdown-doctest` doesn't actually attempt to provide any guarantee that your code worked, only that it didn't explode in a horrible fashion. If you would like to use `markdown-doctest` for that purpose, you can add some `assert`s to your examples.
-
-So why would you use `markdown-doctest`?
----
-
-Because even though all of that can go wrong, it's still nice to know that your examples have no syntax errors and can be run by users.
 
 `markdown-doctest` is not a replacement for your test suite. It's designed to run with your CI build and give you peace of mind that all of your examples are at least vaguely runnable.
+
+Setup logic
+---
 
 You can `require` any needed modules or example helpers in `.markdown-doctest-setup.js`. E.g:
 
 ```js
+// .markdown-doctest-setup.js
 module.exports = {
   Rx: require('rx')
 }
 ```
 
-Anything exported by `.markdown-doctest-setup` will be available in all examples run.
+Anything exported by `.markdown-doctest-setup` will be available globally in your examples.
 
-I plan on adding features to mitigate the above problems, including the ability to disable testing examples that aren't actually runnable!
+Limitations
+---
+
+I plan on adding the ability to disable testing examples that aren't actually runnable!
 
 Currently, `markdown-doctest` only supports javascript, and you have to make sure you write your examples like this:
 
