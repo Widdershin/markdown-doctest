@@ -16,22 +16,24 @@ function read (fileName) {
   return {contents: fs.readFileSync(fileName, 'utf8'), fileName};
 }
 
-function parseCodeSnippets (args) {
-  var contents = args.contents;
-  var fileName = args.fileName;
+var isStartOfSnippet = line => line.trim().match(/```\W*js/);
+var isEndOfSnippet = line => line.trim() === '```';
 
-  var last = (arr) => arr[arr.length - 1];
+function parseCodeSnippet (fileName) {
+  return function parseCodeSnippetLine (snippets, line, index) {
+    var lastSnippet = snippets[snippets.length - 1];
+    var lastSnippetIsStillParsing = _ => lastSnippet && !snippets.lastComplete;
 
-  var codeSnippets = contents.split('\n').reduce((snippets, line, index) => {
-    var lastSnippet = last(snippets);
-
-    if (line.trim().match(/```\W*js/)) {
+    if (isStartOfSnippet(line)) {
       snippets.lastComplete = false;
-      return snippets.concat({code: '', lineNumber: index + 1, fileName});
+
+      return snippets.concat(
+        {code: '', lineNumber: index + 1, fileName}
+      );
     }
 
-    if (lastSnippet && !snippets.lastComplete) {
-      if (line.trim() === '```') {
+    if (lastSnippetIsStillParsing()) {
+      if (isEndOfSnippet(line)) {
         snippets.lastComplete = true;
       } else {
         lastSnippet.code += line + '\n';
@@ -39,7 +41,16 @@ function parseCodeSnippets (args) {
     }
 
     return snippets;
-  }, []);
+  };
+}
+
+function parseCodeSnippets (args) {
+  var contents = args.contents;
+  var fileName = args.fileName;
+
+  var codeSnippets = contents
+    .split('\n')
+    .reduce(parseCodeSnippet(fileName), []);
 
   return {
     fileName,
@@ -63,7 +74,7 @@ function testFile (args) {
 function test (filename) {
   return (codeSnippet) => {
     var success = false;
-    var stack = undefined;
+    var stack;
 
     var oldLog = console.log;
 
