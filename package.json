@@ -26,7 +26,6 @@
   "homepage": "https://github.com/Widdershin/markdown-doctest",
   "devDependencies": {
     "faucet": "0.0.1",
-    "glob": "^5.0.15",
     "tape": "^4.2.2"
   },
   "dependencies": {
