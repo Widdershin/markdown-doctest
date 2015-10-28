@@ -4,29 +4,31 @@ let fs = require('fs');
 let process = require('process');
 let parseCodeSnippets = require('./parse-code-snippets-from-markdown');
 
-function runTests (files) {
-  return flattenArray(files
-    .filter(fileName => fileName !== '')
+function runTests (files, config) {
+  let results = files
     .map(read)
     .map(parseCodeSnippets)
-    .map(testFile)
-  );
+    .map(testFile(config));
+
+  return flattenArray(results);
 }
 
 function read (fileName) {
   return {contents: fs.readFileSync(fileName, 'utf8'), fileName};
 }
 
-function testFile (args) {
-  let codeSnippets = args.codeSnippets;
-  let fileName = args.fileName;
+function testFile (config) {
+  return function testFileWithConfig (args) {
+    let codeSnippets = args.codeSnippets;
+    let fileName = args.fileName;
 
-  let results = codeSnippets.map(test(fileName));
+    let results = codeSnippets.map(test(config, fileName));
 
-  return flattenArray(results);
+    return flattenArray(results);
+  };
 }
 
-function test (filename) {
+function test (config, filename) {
   return (codeSnippet) => {
     if (codeSnippet.skip) {
       return {status: 'skip', codeSnippet, stack: ''};
@@ -39,8 +41,20 @@ function test (filename) {
 
     console.log = () => null;
 
+    function sandboxedRequire (moduleName) {
+      if (config.require[moduleName] === undefined) {
+        throw moduleNotFoundError(moduleName);
+      }
+
+      return config.require[moduleName];
+    }
+
     try {
-      eval('(function () {' + codeSnippet.code + '})();');
+      eval(`
+        (function (require) {
+          ${codeSnippet.code}
+        })(sandboxedRequire);
+      `);
 
       success = true;
     } catch (e) {
@@ -91,6 +105,19 @@ function relevantStackDetails (stack) {
   }
 
   return stack;
+}
+
+function moduleNotFoundError (moduleName) {
+  return new Error(`
+Attempted to require ${moduleName} but was not found in config.
+You need to include it in the require section of your .markdown-doctest-setup.js file.
+
+module.exports = {
+  require: {
+    ${moduleName}: require('${moduleName}')
+  }
+}
+  `);
 }
 
 function markDownErrorLocation (result) {
