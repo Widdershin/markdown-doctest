@@ -13,9 +13,9 @@ let getTestFilePath = (testFile) => {
 test('simple pass', (t) => {
   t.plan(1);
 
-  let results = doctest.runTests([
-    'pass.md'
-  ].map(getTestFilePath));
+  let files = [getTestFilePath('pass.md')];
+  let config = {};
+  let results = doctest.runTests(files, config);
 
   let passingResults = results.filter(result => result.status === 'pass');
 
@@ -25,9 +25,9 @@ test('simple pass', (t) => {
 test('failure', (t) => {
   t.plan(2);
 
-  let results = doctest.runTests([
-    'fail-with-text.md'
-  ].map(getTestFilePath));
+  let files = [getTestFilePath('fail-with-text.md')];
+  let config = {};
+  let results = doctest.runTests(files, config);
 
   let passingResults = results.filter(result => result.status === 'pass');
   let failingResults = results.filter(result => result.status === 'fail');
@@ -39,9 +39,9 @@ test('failure', (t) => {
 test('skipping', (t) => {
   t.plan(3);
 
-  let results = doctest.runTests([
-    'skip.md'
-  ].map(getTestFilePath));
+  let files = [getTestFilePath('skip.md')];
+  let config = {};
+  let results = doctest.runTests(files, config);
 
   let passingResults = results.filter(result => result.status === 'pass');
   let failingResults = results.filter(result => result.status === 'fail');
@@ -52,3 +52,21 @@ test('skipping', (t) => {
   t.equal(skippedResults.length, 1);
 });
 
+
+test('config', (t) => {
+  t.plan(3);
+
+  let files = [getTestFilePath('require-override.md')];
+  let config = {
+    lodash: {range: () => []}
+  };
+  let results = doctest.runTests(files, config);
+
+  let passingResults = results.filter(result => result.status === 'pass');
+  let failingResults = results.filter(result => result.status === 'fail');
+  let skippedResults = results.filter(result => result.status === 'skip');
+
+  t.equal(passingResults.length, 1, results[0].stack);
+  t.equal(failingResults.length, 0);
+  t.equal(skippedResults.length, 0);
+});

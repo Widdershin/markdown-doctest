@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+'use strict';
 
 var doctest = require('../src/doctest');
 
@@ -13,10 +14,11 @@ var DEFAULT_IGNORE = ['node_modules/**'];
 
 function main () {
   var userGlob = process.argv[2];
+  let config = {};
 
   if (fs.existsSync(CONFIG_FILEPATH)) {
     try {
-      Object.assign(global, require(CONFIG_FILEPATH));
+      config = require(CONFIG_FILEPATH);
     } catch (e) {
       console.log('Error running setup:');
       console.trace(e);
@@ -28,14 +30,15 @@ function main () {
     {ignore: DEFAULT_IGNORE},
     run
   );
-}
 
-function run (err, files) {
-  if (err) {
-    console.trace(err);
+  function run (err, files) {
+    if (err) {
+      console.trace(err);
+    }
+
+    doctest.printResults(doctest.runTests(files, config));
   }
-
-  doctest.printResults(doctest.runTests(files));
 }
+
 
 main();
