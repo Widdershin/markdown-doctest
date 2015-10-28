@@ -1,3 +1,8 @@
+[![npm version](https://badge.fury.io/js/markdown-doctest.svg)](http://badge.fury.io/js/markdown-doctest)
+[![Build Status](https://travis-ci.org/Widdershin/markdown-doctest.svg?branch=master)](https://travis-ci.org/Widdershin/markdown-doctest)
+
+* * *
+
 # markdown-doctest
 Test all the code in your markdown docs!
 
