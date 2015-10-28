@@ -4,14 +4,6 @@ let isStartOfSnippet = line => line.trim().match(/```\W*js/);
 let isEndOfSnippet = line => line.trim() === '```';
 let isSkip = line => line.trim() === '<!-- skip-test -->';
 
-function cleanUpSnippet (codeSnippet) {
-  let code = codeSnippet.code
-    .replace('```js', '')
-    .replace('```', '');
-
-  return Object.assign({}, codeSnippet, {code});
-}
-
 function startNewSnippet (snippets, fileName, lineNumber) {
   let skip = snippets.skip;
   snippets.skip = false;
@@ -82,7 +74,7 @@ function parseCodeSnippets (args) {
 
   return {
     fileName,
-    codeSnippets: codeSnippets.map(cleanUpSnippet)
+    codeSnippets
   };
 }
 

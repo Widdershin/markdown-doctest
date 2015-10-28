@@ -17,10 +17,6 @@ function read (fileName) {
   return {contents: fs.readFileSync(fileName, 'utf8'), fileName};
 }
 
-function ignorePseudocode (snippet) {
-  return !snippet.code.match(/\.\.\./g);
-}
-
 function testFile (args) {
   let codeSnippets = args.codeSnippets;
   let fileName = args.fileName;
@@ -84,14 +80,6 @@ function printResults (results) {
 function printFailure (result) {
   console.log(`Failed - ${markDownErrorLocation(result)}`);
   console.log(relevantStackDetails(result.stack));
-}
-
-function cleanUpSnippet (codeSnippet) {
-  let code = codeSnippet.code
-    .replace('```js', '')
-    .replace('```', '');
-
-  return Object.assign({}, codeSnippet, {code});
 }
 
 function relevantStackDetails (stack) {
