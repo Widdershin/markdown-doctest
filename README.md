@@ -55,6 +55,7 @@ Setup logic
 
 You can `require` any needed modules or example helpers in `.markdown-doctest-setup.js`. E.g:
 
+<!-- skip-test -->
 ```js
 // .markdown-doctest-setup.js
 module.exports = {
