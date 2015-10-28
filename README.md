@@ -39,6 +39,17 @@ Note: `markdown-doctest` doesn't actually attempt to provide any guarantee that 
 
 `markdown-doctest` is not a replacement for your test suite. It's designed to run with your CI build and give you peace of mind that all of your examples are at least vaguely runnable.
 
+I have a code example I don't want tested!
+---
+You can tell `markdown-doctest` to skip examples by adding `<!-- skip-test -->` before the example. E.g:
+
+    <!-- skip-test -->
+    ```js
+    // not a runnable example
+
+    var foo = download(...);
+    ```
+
 Setup logic
 ---
 
@@ -55,8 +66,6 @@ Anything exported by `.markdown-doctest-setup` will be available globally in you
 
 Limitations
 ---
-
-I plan on adding the ability to disable testing examples that aren't actually runnable!
 
 Currently, `markdown-doctest` only supports javascript, and you have to make sure you write your examples like this:
 
