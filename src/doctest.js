@@ -5,12 +5,12 @@ let process = require('process');
 let parseCodeSnippets = require('./parse-code-snippets-from-markdown');
 
 function runTests (files) {
-  return flattenArray(files
-    .filter(fileName => fileName !== '')
+  let results = files
     .map(read)
     .map(parseCodeSnippets)
-    .map(testFile)
-  );
+    .map(testFile);
+
+  return flattenArray(results);
 }
 
 function read (fileName) {
