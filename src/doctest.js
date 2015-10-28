@@ -18,10 +18,14 @@ function read (fileName) {
 
 let isStartOfSnippet = line => line.trim().match(/```\W*js/);
 let isEndOfSnippet = line => line.trim() === '```';
+let isSkip = line => line.trim() === '<!-- skip-test -->';
 
 function startNewSnippet (snippets, fileName, lineNumber) {
+  let skip = snippets.skip;
+  snippets.skip = false;
+
   return snippets.concat([
-    {code: '', fileName, lineNumber}
+    {code: '', fileName, lineNumber, complete: false, skip}
   ]);
 }
 
@@ -47,6 +51,12 @@ function endSnippet (snippets, fileName, lineNumber) {
   return snippets;
 }
 
+function skip (snippets) {
+  snippets.skip = true;
+
+  return snippets;
+}
+
 function parseLine (line) {
   if (isStartOfSnippet(line)) {
     return startNewSnippet;
@@ -54,6 +64,10 @@ function parseLine (line) {
 
   if (isEndOfSnippet(line)) {
     return endSnippet;
+  }
+
+  if (isSkip(line)) {
+    return skip;
   }
 
   return addLineToLastSnippet(line);
@@ -95,8 +109,12 @@ function testFile (args) {
 
 function test (filename) {
   return (codeSnippet) => {
+    if (codeSnippet.skip) { 
+      return {status: 'skip', codeSnippet, stack: ''};
+    }
+
     let success = false;
-    let stack;
+    let stack = '';
 
     let oldLog = console.log;
 
@@ -111,7 +129,10 @@ function test (filename) {
     }
 
     console.log = oldLog;
-    return {success: success, codeSnippet: codeSnippet, stack: stack};
+
+    let status = success ? 'pass' : 'fail';
+
+    return {status, codeSnippet, stack};
   };
 }
 
@@ -121,15 +142,20 @@ function flattenArray (array) {
 
 function printResults (results) {
   results
-    .filter(result => !result.success)
+    .filter(result => result.status === 'fail')
     .forEach(printFailure);
 
-  let totalTestCount = results.length;
-  let passingCount = results.filter(result => result.success).length;
+  let passingCount = results.filter(result => result.status === 'pass').length;
+  let failingCount = results.filter(result => result.status === 'fail').length;
+  let skippingCount = results.filter(result => result.status === 'skip').length;
 
-  console.log(`${passingCount}/${totalTestCount} passing`);
+  function successfulRun () {
+    return failingCount === 0;
+  }
 
-  process.exit(totalTestCount === passingCount ? 0 : 127);
+  console.log(`Passing: ${passingCount} \nSkipped: ${skippingCount} \nFailed: ${failingCount}`);
+
+  process.exit(successfulRun() ? 0 : 127);
 }
 
 function printFailure (result) {
