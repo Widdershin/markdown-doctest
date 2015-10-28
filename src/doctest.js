@@ -2,6 +2,8 @@
 
 let fs = require('fs');
 let process = require('process');
+let vm = require('vm');
+
 let parseCodeSnippets = require('./parse-code-snippets-from-markdown');
 
 function runTests (files, config) {
@@ -37,11 +39,7 @@ function test (config, filename) {
     let success = false;
     let stack = '';
 
-    let oldLog = console.log;
-
-    console.log = () => null;
-
-    function sandboxedRequire (moduleName) {
+    function sandboxRequire (moduleName) {
       if (config.require[moduleName] === undefined) {
         throw moduleNotFoundError(moduleName);
       }
@@ -49,30 +47,24 @@ function test (config, filename) {
       return config.require[moduleName];
     }
 
-    function dirtyGlobalHack (globals) {
-      let globalsEval = '';
+    let sandboxConsole = {
+      log: () => null
+    };
 
-      for (let key in globals) {
-        globalsEval += `let ${key} = globals[${JSON.stringify(key)}];`;
-      }
-
-      return globalsEval;
-    }
+    let sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
+    let sandbox = Object.assign(config.globals || {}, sandboxGlobals);
 
     try {
-      eval(`
-        (function (require, globals) {
-          ${dirtyGlobalHack(config.globals)};
+      vm.runInNewContext(`
+        (function () {
           ${codeSnippet.code}
-        })(sandboxedRequire, config.globals);
-      `);
+        })();
+      `, sandbox);
 
       success = true;
     } catch (e) {
       stack = e.stack || '';
     }
-
-    console.log = oldLog;
 
     let status = success ? 'pass' : 'fail';
 

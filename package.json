@@ -7,7 +7,7 @@
     "markdown-doctest": "bin/cmd.js"
   },
   "scripts": {
-    "test": "tape 'faucet'"
+    "test": "faucet"
   },
   "repository": {
     "type": "git",
