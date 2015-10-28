@@ -49,11 +49,22 @@ function test (config, filename) {
       return config.require[moduleName];
     }
 
+    function dirtyGlobalHack (globals) {
+      let globalsEval = '';
+
+      for (let key in globals) {
+        globalsEval += `let ${key} = globals[${JSON.stringify(key)}];`;
+      }
+
+      return globalsEval;
+    }
+
     try {
       eval(`
-        (function (require) {
+        (function (require, globals) {
+          ${dirtyGlobalHack(config.globals)};
           ${codeSnippet.code}
-        })(sandboxedRequire);
+        })(sandboxedRequire, config.globals);
       `);
 
       success = true;

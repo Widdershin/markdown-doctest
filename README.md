@@ -61,12 +61,18 @@ You can `require` any needed modules or example helpers in `.markdown-doctest-se
 module.exports = {
   require: {
     Rx: require('rx')
+  },
+
+  globals: {
+    $: require('jquery')
   }
 }
 ```
 
 Anything exported under `require` will then be used by any examples that `require` that key.
 You must explicitly configure all of the dependencies used in your examples.
+
+Anything exported under `globals` will be available globally across all examples.
 
 Limitations
 ---
