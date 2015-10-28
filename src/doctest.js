@@ -19,29 +19,44 @@ function read (fileName) {
 let isStartOfSnippet = line => line.trim().match(/```\W*js/);
 let isEndOfSnippet = line => line.trim() === '```';
 
-function parseCodeSnippet (fileName) {
-  return function parseCodeSnippetLine (snippets, line, index) {
+function startNewSnippet (snippets, fileName, lineNumber) {
+  return snippets.concat([
+    {code: '', fileName, lineNumber}
+  ]);
+}
+
+function addLineToLastSnippet (line) {
+  return (snippets) => {
     let lastSnippet = snippets[snippets.length - 1];
-    let lastSnippetIsStillParsing = _ => lastSnippet && !snippets.lastComplete;
 
-    if (isStartOfSnippet(line)) {
-      snippets.lastComplete = false;
-
-      return snippets.concat(
-        {code: '', lineNumber: index + 1, fileName}
-      );
-    }
-
-    if (lastSnippetIsStillParsing()) {
-      if (isEndOfSnippet(line)) {
-        snippets.lastComplete = true;
-      } else {
-        lastSnippet.code += line + '\n';
-      }
+    if (lastSnippet && !lastSnippet.complete) {
+      lastSnippet.code += line + '\n';
     }
 
     return snippets;
   };
+}
+
+function endSnippet (snippets, fileName, lineNumber) {
+  let lastSnippet = snippets[snippets.length - 1];
+
+  if (lastSnippet) {
+    lastSnippet.complete = true;
+  }
+
+  return snippets;
+}
+
+function parseLine (line) {
+  if (isStartOfSnippet(line)) {
+    return startNewSnippet;
+  }
+
+  if (isEndOfSnippet(line)) {
+    return endSnippet;
+  }
+
+  return addLineToLastSnippet(line);
 }
 
 function parseCodeSnippets (args) {
@@ -50,7 +65,14 @@ function parseCodeSnippets (args) {
 
   let codeSnippets = contents
     .split('\n')
-    .reduce(parseCodeSnippet(fileName), []);
+    .map(parseLine)
+    .reduce((snippets, lineAction, index) => lineAction(snippets, fileName, index + 1), []);
+
+  let lastSnippet = codeSnippets[codeSnippets.length - 1];
+
+  if (lastSnippet && !lastSnippet.complete) {
+    throw new Error('Snippet parsing was incomplete');
+  }
 
   return {
     fileName,
