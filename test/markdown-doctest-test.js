@@ -71,3 +71,24 @@ test('config', (t) => {
   t.equal(failingResults.length, 0);
   t.equal(skippedResults.length, 0);
 });
+
+test('globals', (t) => {
+  t.plan(3);
+
+  let files = [getTestFilePath('globals.md')];
+  let config = {
+    globals: {
+      name: 'Nick'
+    }
+  };
+
+  let results = doctest.runTests(files, config);
+
+  let passingResults = results.filter(result => result.status === 'pass');
+  let failingResults = results.filter(result => result.status === 'fail');
+  let skippedResults = results.filter(result => result.status === 'skip');
+
+  t.equal(passingResults.length, 1, results[0].stack);
+  t.equal(failingResults.length, 0);
+  t.equal(skippedResults.length, 0);
+});
