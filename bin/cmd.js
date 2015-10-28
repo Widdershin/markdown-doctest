@@ -14,7 +14,7 @@ var DEFAULT_IGNORE = ['node_modules/**'];
 
 function main () {
   var userGlob = process.argv[2];
-  let config = {};
+  let config = {require: {}};
 
   if (fs.existsSync(CONFIG_FILEPATH)) {
     try {

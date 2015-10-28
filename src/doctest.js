@@ -42,11 +42,11 @@ function test (config, filename) {
     console.log = () => null;
 
     function sandboxedRequire (moduleName) {
-      if (config[moduleName] === undefined) {
-        throw new Error(`Attempted to require ${moduleName} but was not found in config`);
+      if (config.require[moduleName] === undefined) {
+        throw moduleNotFoundError(moduleName);
       }
 
-      return config[moduleName];
+      return config.require[moduleName];
     }
 
     try {
@@ -105,6 +105,19 @@ function relevantStackDetails (stack) {
   }
 
   return stack;
+}
+
+function moduleNotFoundError (moduleName) {
+  return new Error(`
+Attempted to require ${moduleName} but was not found in config.
+You need to include it in the require section of your .markdown-doctest-setup.js file.
+
+module.exports = {
+  require: {
+    ${moduleName}: require('${moduleName}')
+  }
+}
+  `);
 }
 
 function markDownErrorLocation (result) {

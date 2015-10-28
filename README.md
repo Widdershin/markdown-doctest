@@ -50,7 +50,7 @@ You can tell `markdown-doctest` to skip examples by adding `<!-- skip-test -->` 
     var foo = download(...);
     ```
 
-Setup logic
+How do requires work? And other setup logic?
 ---
 
 You can `require` any needed modules or example helpers in `.markdown-doctest-setup.js`. E.g:
@@ -59,11 +59,14 @@ You can `require` any needed modules or example helpers in `.markdown-doctest-se
 ```js
 // .markdown-doctest-setup.js
 module.exports = {
-  Rx: require('rx')
+  require: {
+    Rx: require('rx')
+  }
 }
 ```
 
-Anything exported by `.markdown-doctest-setup` will be available globally in your examples.
+Anything exported under `require` will then be used by any examples that `require` that key.
+You must explicitly configure all of the dependencies used in your examples.
 
 Limitations
 ---

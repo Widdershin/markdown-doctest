@@ -52,13 +52,14 @@ test('skipping', (t) => {
   t.equal(skippedResults.length, 1);
 });
 
-
 test('config', (t) => {
   t.plan(3);
 
   let files = [getTestFilePath('require-override.md')];
   let config = {
-    lodash: {range: () => []}
+    require: {
+      lodash: {range: () => []}
+    }
   };
   let results = doctest.runTests(files, config);
 
