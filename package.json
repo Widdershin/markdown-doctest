@@ -1,6 +1,6 @@
 {
   "name": "markdown-doctest",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "Test all the code in your markdown docs!",
   "main": "src/doctest.js",
   "bin": {
