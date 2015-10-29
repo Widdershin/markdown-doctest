@@ -3,6 +3,7 @@
 let fs = require('fs');
 let process = require('process');
 let vm = require('vm');
+let babel = require('babel-core');
 
 let chalk = require('chalk');
 
@@ -56,10 +57,18 @@ function test (config, filename) {
     let sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
     let sandbox = Object.assign(config.globals || {}, sandboxGlobals);
 
+    let babelOptions = config.babel || {};
+
+    let code = codeSnippet.code;
+
+    if (config.babel !== false) {
+      code = babel.transform(codeSnippet.code, babelOptions).code;
+    }
+
     try {
       vm.runInNewContext(`
         (function () {
-          ${codeSnippet.code}
+          ${code}
         })();
       `, sandbox);
 
