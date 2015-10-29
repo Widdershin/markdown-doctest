@@ -4,6 +4,8 @@ let fs = require('fs');
 let process = require('process');
 let vm = require('vm');
 
+let chalk = require('chalk');
+
 let parseCodeSnippets = require('./parse-code-snippets-from-markdown');
 
 function runTests (files, config) {
@@ -89,13 +91,21 @@ function printResults (results) {
     return failingCount === 0;
   }
 
-  console.log(`Passing: ${passingCount} \nSkipped: ${skippingCount} \nFailed: ${failingCount}`);
+  console.log(`
+${chalk.green('Passed: ' + passingCount)}
+${chalk.yellow('Skipped: ' + skippingCount)}
+${chalk.red('Failed: ' + failingCount)}
+  `);
+
+  if (successfulRun()) {
+    console.log(chalk.green('Success!'));
+  }
 
   process.exit(successfulRun() ? 0 : 127);
 }
 
 function printFailure (result) {
-  console.log(`Failed - ${markDownErrorLocation(result)}`);
+  console.log(chalk.red(`Failed - ${markDownErrorLocation(result)}`));
   console.log(relevantStackDetails(result.stack));
 }
 
@@ -112,12 +122,12 @@ function relevantStackDetails (stack) {
 
 function moduleNotFoundError (moduleName) {
   return new Error(`
-Attempted to require ${moduleName} but was not found in config.
-You need to include it in the require section of your .markdown-doctest-setup.js file.
+Attempted to require '${chalk.blue(moduleName)}' but was not found in config.
+You need to include it in the require section of your ${chalk.blue('.markdown-doctest-setup.js')} file.
 
 module.exports = {
   require: {
-    ${moduleName}: require('${moduleName}')
+    ${chalk.blue(`'${moduleName}': require('${moduleName}')`)}
   }
 }
   `);
