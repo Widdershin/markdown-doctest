@@ -61,11 +61,11 @@ function test (config, filename) {
 
     let code = codeSnippet.code;
 
-    if (config.babel !== false) {
-      code = babel.transform(codeSnippet.code, babelOptions).code;
-    }
-
     try {
+      if (config.babel !== false) {
+        code = babel.transform(codeSnippet.code, babelOptions).code;
+      }
+
       vm.runInNewContext(`
         (function () {
           ${code}
