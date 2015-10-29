@@ -1,13 +1,14 @@
 {
   "name": "markdown-doctest",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Test all the code in your markdown docs!",
   "main": "src/doctest.js",
   "bin": {
     "markdown-doctest": "bin/cmd.js"
   },
   "scripts": {
-    "test": "faucet"
+    "test": "mocha",
+    "autotest": "mocha --watch -R min"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "homepage": "https://github.com/Widdershin/markdown-doctest",
   "devDependencies": {
     "faucet": "0.0.1",
+    "mocha": "^2.3.3",
     "tape": "^4.2.2"
   },
   "dependencies": {

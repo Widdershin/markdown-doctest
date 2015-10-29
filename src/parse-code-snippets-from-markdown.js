@@ -3,19 +3,20 @@
 let isStartOfSnippet = line => line.trim().match(/```\W*(JavaScript|js|es6)/i);
 let isEndOfSnippet = line => line.trim() === '```';
 let isSkip = line => line.trim() === '<!-- skip-test -->';
+let isEnvironment = line => line.trim() === '<!-- environment -->';
 
 function startNewSnippet (snippets, fileName, lineNumber) {
   let skip = snippets.skip;
   snippets.skip = false;
 
-  return snippets.concat([
+  return Object.assign(snippets, {snippets: snippets.snippets.concat([
     {code: '', fileName, lineNumber, complete: false, skip}
-  ]);
+  ])});
 }
 
 function addLineToLastSnippet (line) {
-  return (snippets) => {
-    let lastSnippet = snippets[snippets.length - 1];
+  return function addLine (snippets) {
+    let lastSnippet = snippets.snippets[snippets.snippets.length - 1];
 
     if (lastSnippet && !lastSnippet.complete) {
       lastSnippet.code += line + '\n';
@@ -26,7 +27,7 @@ function addLineToLastSnippet (line) {
 }
 
 function endSnippet (snippets, fileName, lineNumber) {
-  let lastSnippet = snippets[snippets.length - 1];
+  let lastSnippet = snippets.snippets[snippets.snippets.length - 1];
 
   if (lastSnippet) {
     lastSnippet.complete = true;
@@ -37,6 +38,12 @@ function endSnippet (snippets, fileName, lineNumber) {
 
 function skip (snippets) {
   snippets.skip = true;
+
+  return snippets;
+}
+
+function environment (snippets) {
+  snippets.preserveEnvironment = true;
 
   return snippets;
 }
@@ -54,6 +61,10 @@ function parseLine (line) {
     return skip;
   }
 
+  if (isEnvironment(line)) {
+    return environment;
+  }
+
   return addLineToLastSnippet(line);
 }
 
@@ -61,10 +72,20 @@ function parseCodeSnippets (args) {
   let contents = args.contents;
   let fileName = args.fileName;
 
-  let codeSnippets = contents
+  let initialState = {
+    snippets: [],
+    preserveEnvironment: false,
+    complete: false
+  }
+
+    function log (thing) { console.log(thing); return thing; }
+
+  let results = contents
     .split('\n')
     .map(parseLine)
-    .reduce((snippets, lineAction, index) => lineAction(snippets, fileName, index + 1), []);
+    .reduce((snippets, lineAction, index) => lineAction(snippets, fileName, index + 1), initialState);
+
+  let codeSnippets = results.snippets;
 
   let lastSnippet = codeSnippets[codeSnippets.length - 1];
 
@@ -74,7 +95,8 @@ function parseCodeSnippets (args) {
 
   return {
     fileName,
-    codeSnippets
+    codeSnippets,
+    preserveEnvironment: results.preserveEnvironment
   };
 }
 

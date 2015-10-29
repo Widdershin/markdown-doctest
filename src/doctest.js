@@ -22,18 +22,45 @@ function read (fileName) {
   return {contents: fs.readFileSync(fileName, 'utf8'), fileName};
 }
 
-function testFile (config) {
+function makeTestSandbox (config) {
+  function sandboxRequire (moduleName) {
+    if (config.require[moduleName] === undefined) {
+      throw moduleNotFoundError(moduleName);
+    }
+
+    return config.require[moduleName];
+  }
+
+  let sandboxConsole = {
+    log: () => null
+  };
+
+  let sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
+  let sandbox = Object.assign({}, config.globals, sandboxGlobals);
+
+  return sandbox;
+}
+
+function testFile (config, preserveEnvironment) {
   return function testFileWithConfig (args) {
     let codeSnippets = args.codeSnippets;
     let fileName = args.fileName;
+    let preserveEnvironment = args.preserveEnvironment;
 
-    let results = codeSnippets.map(test(config, fileName));
+    let results;
+
+    if (preserveEnvironment) {
+      let sandbox = makeTestSandbox(config);
+      results = codeSnippets.map(test(config, fileName, sandbox));
+    } else {
+      results = codeSnippets.map(test(config, fileName));
+    }
 
     return flattenArray(results);
   };
 }
 
-function test (config, filename) {
+function test (config, filename, sandbox) {
   return (codeSnippet) => {
     if (codeSnippet.skip) {
       process.stdout.write(chalk.yellow('s'));
@@ -43,35 +70,26 @@ function test (config, filename) {
     let success = false;
     let stack = '';
 
-    function sandboxRequire (moduleName) {
-      if (config.require[moduleName] === undefined) {
-        throw moduleNotFoundError(moduleName);
-      }
-
-      return config.require[moduleName];
-    }
-
-    let sandboxConsole = {
-      log: () => null
+    let defaultBabelOptions = {
+      nonStandard: false,
+      ast: false
     };
 
-    let sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
-    let sandbox = Object.assign(config.globals || {}, sandboxGlobals);
-
-    let babelOptions = config.babel || {};
+    let babelOptions = Object.assign({}, defaultBabelOptions, config.babel || {});
 
     let code = codeSnippet.code;
+    let perSnippetSandbox;
+
+    if (sandbox === undefined) {
+      perSnippetSandbox = makeTestSandbox(config);
+    }
 
     try {
       if (config.babel !== false) {
         code = babel.transform(codeSnippet.code, babelOptions).code;
       }
 
-      vm.runInNewContext(`
-        (function () {
-          ${code}
-        })();
-      `, sandbox);
+      vm.runInNewContext(code, perSnippetSandbox || sandbox);
 
       success = true;
     } catch (e) {

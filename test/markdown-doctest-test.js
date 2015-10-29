@@ -1,8 +1,9 @@
+/* globals describe, it */
 'use strict';
 
 let path = require('path');
 
-let test = require('tape');
+let assert = require('assert');
 
 let doctest = require('../src/doctest');
 
@@ -10,102 +11,108 @@ let getTestFilePath = (testFile) => {
   return path.join(__dirname, '/test_files/', testFile);
 };
 
-test('pass', (t) => {
-  t.plan(1);
+describe('runTests', () => {
+  it('pass', () => {
+    let files = [getTestFilePath('pass.md')];
 
-  let files = [getTestFilePath('pass.md')];
-  let config = {};
-  let results = doctest.runTests(files, config);
+    let config = {};
+    let results = doctest.runTests(files, config);
 
-  let passingResults = results.filter(result => result.status === 'pass');
+    let passingResults = results.filter(result => result.status === 'pass');
 
-  t.equal(passingResults.length, 1);
-});
+    assert.equal(passingResults.length, 1);
+  });
 
-test('fail', (t) => {
-  t.plan(2);
+  it('fail', () => {
+    let files = [getTestFilePath('fail-with-text.md')];
+    let config = {};
+    let results = doctest.runTests(files, config);
 
-  let files = [getTestFilePath('fail-with-text.md')];
-  let config = {};
-  let results = doctest.runTests(files, config);
+    let passingResults = results.filter(result => result.status === 'pass');
+    let failingResults = results.filter(result => result.status === 'fail');
 
-  let passingResults = results.filter(result => result.status === 'pass');
-  let failingResults = results.filter(result => result.status === 'fail');
+    assert.equal(passingResults.length, 1, JSON.stringify(results, null, 2));
+    assert.equal(failingResults.length, 2);
+  });
 
-  t.equal(passingResults.length, 0);
-  t.equal(failingResults.length, 1);
-});
+  it('skip', () => {
+    let files = [getTestFilePath('skip.md')];
+    let config = {};
+    let results = doctest.runTests(files, config);
 
-test('skip', (t) => {
-  t.plan(3);
+    let passingResults = results.filter(result => result.status === 'pass');
+    let failingResults = results.filter(result => result.status === 'fail');
+    let skippedResults = results.filter(result => result.status === 'skip');
 
-  let files = [getTestFilePath('skip.md')];
-  let config = {};
-  let results = doctest.runTests(files, config);
+    assert.equal(passingResults.length, 1);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 1);
+  });
 
-  let passingResults = results.filter(result => result.status === 'pass');
-  let failingResults = results.filter(result => result.status === 'fail');
-  let skippedResults = results.filter(result => result.status === 'skip');
+  it('config', () => {
+    let files = [getTestFilePath('require-override.md')];
+    let config = {
+      require: {
+        lodash: {range: () => []}
+      }
+    };
+    let results = doctest.runTests(files, config);
 
-  t.equal(passingResults.length, 1);
-  t.equal(failingResults.length, 0);
-  t.equal(skippedResults.length, 1);
-});
+    let passingResults = results.filter(result => result.status === 'pass');
+    let failingResults = results.filter(result => result.status === 'fail');
+    let skippedResults = results.filter(result => result.status === 'skip');
 
-test('config', (t) => {
-  t.plan(3);
+    assert.equal(passingResults.length, 1, results[0].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
 
-  let files = [getTestFilePath('require-override.md')];
-  let config = {
-    require: {
-      lodash: {range: () => []}
-    }
-  };
-  let results = doctest.runTests(files, config);
+  it('globals', () => {
+    let files = [getTestFilePath('globals.md')];
+    let config = {
+      globals: {
+        name: 'Nick'
+      }
+    };
 
-  let passingResults = results.filter(result => result.status === 'pass');
-  let failingResults = results.filter(result => result.status === 'fail');
-  let skippedResults = results.filter(result => result.status === 'skip');
+    let results = doctest.runTests(files, config);
 
-  t.equal(passingResults.length, 1, results[0].stack);
-  t.equal(failingResults.length, 0);
-  t.equal(skippedResults.length, 0);
-});
+    let passingResults = results.filter(result => result.status === 'pass');
+    let failingResults = results.filter(result => result.status === 'fail');
+    let skippedResults = results.filter(result => result.status === 'skip');
 
-test('globals', (t) => {
-  t.plan(3);
+    assert.equal(passingResults.length, 1, results[0].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
 
-  let files = [getTestFilePath('globals.md')];
-  let config = {
-    globals: {
-      name: 'Nick'
-    }
-  };
+  it('es6', () => {
+    let files = [getTestFilePath('es6.md')];
+    let config = {};
 
-  let results = doctest.runTests(files, config);
+    let results = doctest.runTests(files, config);
 
-  let passingResults = results.filter(result => result.status === 'pass');
-  let failingResults = results.filter(result => result.status === 'fail');
-  let skippedResults = results.filter(result => result.status === 'skip');
+    let passingResults = results.filter(result => result.status === 'pass');
+    let failingResults = results.filter(result => result.status === 'fail');
+    let skippedResults = results.filter(result => result.status === 'skip');
 
-  t.equal(passingResults.length, 1, results[0].stack);
-  t.equal(failingResults.length, 0);
-  t.equal(skippedResults.length, 0);
-});
+    assert.equal(passingResults.length, 2, results[0].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
 
-test('es6', (t) => {
-  t.plan(3);
+  it('joins tests', () => {
+    let files = [getTestFilePath('environment.md')];
+    let config = {};
 
-  let files = [getTestFilePath('es6.md')];
-  let config = {};
+    let results = doctest.runTests(files, config);
 
-  let results = doctest.runTests(files, config);
+    let passingResults = results.filter(result => result.status === 'pass');
+    let failingResults = results.filter(result => result.status === 'fail');
+    let skippedResults = results.filter(result => result.status === 'skip');
 
-  let passingResults = results.filter(result => result.status === 'pass');
-  let failingResults = results.filter(result => result.status === 'fail');
-  let skippedResults = results.filter(result => result.status === 'skip');
-
-  t.equal(passingResults.length, 2, results[0].stack);
-  t.equal(failingResults.length, 0);
-  t.equal(skippedResults.length, 0);
+    assert.equal(passingResults.length, 3, results[1].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
 });
