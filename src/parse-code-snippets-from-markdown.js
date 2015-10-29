@@ -1,6 +1,6 @@
 'use strict';
 
-let isStartOfSnippet = line => line.trim().match(/```\W*js/);
+let isStartOfSnippet = line => line.trim().match(/```\W*(js|es6)/);
 let isEndOfSnippet = line => line.trim() === '```';
 let isSkip = line => line.trim() === '<!-- skip-test -->';
 

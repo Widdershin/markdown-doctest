@@ -44,6 +44,20 @@ Note: `markdown-doctest` doesn't actually attempt to provide any guarantee that 
 
 `markdown-doctest` is not a replacement for your test suite. It's designed to run with your CI build and give you peace of mind that all of your examples are at least vaguely runnable.
 
+So how do I write those examples?
+---
+
+In your markdown files, anything inside of code blocks with 'js' or 'es6' will be run. E.g:
+
+    ```js
+    console.log("Yay, tests in my docs");
+    ```
+
+    ```es6
+    const a = 5;
+    console.log({a, foo: 'test'});
+    ```
+
 I have a code example I don't want tested!
 ---
 You can tell `markdown-doctest` to skip examples by adding `<!-- skip-test -->` before the example. E.g:
@@ -79,19 +93,28 @@ You must explicitly configure all of the dependencies used in your examples.
 
 Anything exported under `globals` will be available globally across all examples.
 
-Limitations
+Do I have to enable es6 support?
 ---
 
-Currently, `markdown-doctest` only supports javascript, and you have to make sure you write your examples like this:
+Nope, ES6 support is on by default. You can configure babel in your `.markdown-doctest-setup.js`
 
-
-    ```js
-    console.log("Hello world");
-    ```
-
-
-Note the `js` after the three backticks. That's what's used to find examples to run (and by Github to determine syntax highlighting). It looks like this:
-
+<!-- skip -->
 ```js
-console.log("Hello world");
+//.markdown-doctest-setup.js
+module.exports = {
+  babel: {
+    stage: 0
+  }
+}
 ```
+
+You can also disable `babel` support. This will speed things up drastically:
+
+<!-- skip -->
+```js
+//.markdown-doctest-setup.js
+module.exports = {
+  babel: false
+}
+```
+
