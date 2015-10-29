@@ -98,7 +98,7 @@ Do I have to enable es6 support?
 
 Nope, ES6 support is on by default. You can configure babel in your `.markdown-doctest-setup.js`
 
-<!-- skip -->
+<!-- skip-test -->
 ```js
 //.markdown-doctest-setup.js
 module.exports = {
@@ -110,7 +110,7 @@ module.exports = {
 
 You can also disable `babel` support. This will speed things up drastically:
 
-<!-- skip -->
+<!-- skip-test -->
 ```js
 //.markdown-doctest-setup.js
 module.exports = {
