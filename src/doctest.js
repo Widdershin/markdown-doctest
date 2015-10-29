@@ -36,6 +36,7 @@ function testFile (config) {
 function test (config, filename) {
   return (codeSnippet) => {
     if (codeSnippet.skip) {
+      process.stdout.write(chalk.yellow('s'));
       return {status: 'skip', codeSnippet, stack: ''};
     }
 
@@ -78,6 +79,8 @@ function test (config, filename) {
     }
 
     let status = success ? 'pass' : 'fail';
+
+    process.stdout.write(success ? chalk.green('.') : chalk.red('x'));
 
     return {status, codeSnippet, stack};
   };

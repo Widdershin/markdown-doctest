@@ -38,6 +38,8 @@ function main () {
 
     var results = doctest.runTests(files, config);
 
+    console.log('\n');
+
     doctest.printResults(results);
 
     var failures = results.filter(result => result.status === 'fail');
