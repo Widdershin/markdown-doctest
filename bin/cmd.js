@@ -36,7 +36,17 @@ function main () {
       console.trace(err);
     }
 
-    doctest.printResults(doctest.runTests(files, config));
+    var results = doctest.runTests(files, config);
+
+    doctest.printResults(results);
+
+    var failures = results.filter(result => result.status === 'fail');
+
+    if (failures.length === 0) {
+      process.exit();
+    } else {
+      process.exit(127);
+    }
   }
 }
 

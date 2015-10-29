@@ -109,8 +109,6 @@ ${chalk.red('Failed: ' + failingCount)}
   if (successfulRun()) {
     console.log(chalk.green('Success!'));
   }
-
-  process.exit(successfulRun() ? 0 : 127);
 }
 
 function printFailure (result) {
