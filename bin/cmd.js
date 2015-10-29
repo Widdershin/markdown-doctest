@@ -42,10 +42,8 @@ function main () {
 
     var failures = results.filter(result => result.status === 'fail');
 
-    if (failures.length === 0) {
-      process.exit();
-    } else {
-      process.exit(127);
+    if (failures.length > 0) {
+      process.exitCode = 127;
     }
   }
 }
