@@ -148,6 +148,8 @@ function markDownErrorLocation (result) {
 
     return `${result.codeSnippet.fileName}:${lineNumber}:${columnNumber}`;
   }
+
+  return `${result.codeSnippet.fileName}:${result.codeSnippet.lineNumber}`;
 }
 
 module.exports = {printResults, runTests};
