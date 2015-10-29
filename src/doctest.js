@@ -1,16 +1,16 @@
 'use strict';
 
-let fs = require('fs');
-let process = require('process');
-let vm = require('vm');
-let babel = require('babel-core');
+const fs = require('fs');
+const process = require('process');
+const vm = require('vm');
+const babel = require('babel-core');
 
-let chalk = require('chalk');
+const chalk = require('chalk');
 
-let parseCodeSnippets = require('./parse-code-snippets-from-markdown');
+const parseCodeSnippets = require('./parse-code-snippets-from-markdown');
 
 function runTests (files, config) {
-  let results = files
+  const results = files
     .map(read)
     .map(parseCodeSnippets)
     .map(testFile(config));
@@ -31,26 +31,26 @@ function makeTestSandbox (config) {
     return config.require[moduleName];
   }
 
-  let sandboxConsole = {
+  const sandboxConsole = {
     log: () => null
   };
 
-  let sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
-  let sandbox = Object.assign({}, config.globals, sandboxGlobals);
+  const sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
+  const sandbox = Object.assign({}, config.globals, sandboxGlobals);
 
   return sandbox;
 }
 
 function testFile (config, preserveEnvironment) {
   return function testFileWithConfig (args) {
-    let codeSnippets = args.codeSnippets;
-    let fileName = args.fileName;
-    let preserveEnvironment = args.preserveEnvironment;
+    const codeSnippets = args.codeSnippets;
+    const fileName = args.fileName;
+    const preserveEnvironment = args.preserveEnvironment;
 
     let results;
 
     if (preserveEnvironment) {
-      let sandbox = makeTestSandbox(config);
+      const sandbox = makeTestSandbox(config);
       results = codeSnippets.map(test(config, fileName, sandbox));
     } else {
       results = codeSnippets.map(test(config, fileName));
@@ -70,12 +70,12 @@ function test (config, filename, sandbox) {
     let success = false;
     let stack = '';
 
-    let defaultBabelOptions = {
+    const defaultBabelOptions = {
       nonStandard: false,
       ast: false
     };
 
-    let babelOptions = Object.assign({}, defaultBabelOptions, config.babel || {});
+    const babelOptions = Object.assign({}, defaultBabelOptions, config.babel || {});
 
     let code = codeSnippet.code;
     let perSnippetSandbox;
@@ -96,7 +96,7 @@ function test (config, filename, sandbox) {
       stack = e.stack || '';
     }
 
-    let status = success ? 'pass' : 'fail';
+    const status = success ? 'pass' : 'fail';
 
     process.stdout.write(success ? chalk.green('.') : chalk.red('x'));
 
@@ -113,9 +113,9 @@ function printResults (results) {
     .filter(result => result.status === 'fail')
     .forEach(printFailure);
 
-  let passingCount = results.filter(result => result.status === 'pass').length;
-  let failingCount = results.filter(result => result.status === 'fail').length;
-  let skippingCount = results.filter(result => result.status === 'skip').length;
+  const passingCount = results.filter(result => result.status === 'pass').length;
+  const failingCount = results.filter(result => result.status === 'fail').length;
+  const skippingCount = results.filter(result => result.status === 'skip').length;
 
   function successfulRun () {
     return failingCount === 0;
@@ -138,7 +138,7 @@ function printFailure (result) {
 }
 
 function relevantStackDetails (stack) {
-  let match = stack.match(/([\w\W]*?)at eval/) ||
+  const match = stack.match(/([\w\W]*?)at eval/) ||
     stack.match(/([\w\W]*)at [\w*\/]*?doctest.js/);
 
   if (match !== null) {
@@ -162,17 +162,17 @@ module.exports = {
 }
 
 function markDownErrorLocation (result) {
-  let stackLines = result.stack.split('\n');
+  const stackLines = result.stack.split('\n');
 
-  let evalStackLines = stackLines.filter(line => line.match(/eval/));
+  const evalStackLines = stackLines.filter(line => line.match(/eval/));
 
   if (evalStackLines.length !== 0) {
-    let match = evalStackLines[0].match(/<.*>:(\d+):(\d+)/);
+    const match = evalStackLines[0].match(/<.*>:(\d+):(\d+)/);
 
-    let mdLineNumber = parseInt(match[1], 10);
-    let columnNumber = parseInt(match[2], 10);
+    const mdLineNumber = parseInt(match[1], 10);
+    const columnNumber = parseInt(match[2], 10);
 
-    let lineNumber = result.codeSnippet.lineNumber + mdLineNumber;
+    const lineNumber = result.codeSnippet.lineNumber + mdLineNumber;
 
     return `${result.codeSnippet.fileName}:${lineNumber}:${columnNumber}`;
   }

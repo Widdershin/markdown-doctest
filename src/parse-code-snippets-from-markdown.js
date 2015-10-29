@@ -1,12 +1,12 @@
 'use strict';
 
-let isStartOfSnippet = line => line.trim().match(/```\W*(JavaScript|js|es6)/i);
-let isEndOfSnippet = line => line.trim() === '```';
-let isSkip = line => line.trim() === '<!-- skip-test -->';
-let isEnvironment = line => line.trim() === '<!-- environment -->';
+const isStartOfSnippet = line => line.trim().match(/```\W*(JavaScript|js|es6)/i);
+const isEndOfSnippet = line => line.trim() === '```';
+const isSkip = line => line.trim() === '<!-- skip-test -->';
+const isEnvironment = line => line.trim() === '<!-- environment -->';
 
 function startNewSnippet (snippets, fileName, lineNumber) {
-  let skip = snippets.skip;
+  const skip = snippets.skip;
   snippets.skip = false;
 
   return Object.assign(snippets, {snippets: snippets.snippets.concat([
@@ -16,7 +16,7 @@ function startNewSnippet (snippets, fileName, lineNumber) {
 
 function addLineToLastSnippet (line) {
   return function addLine (snippets) {
-    let lastSnippet = snippets.snippets[snippets.snippets.length - 1];
+    const lastSnippet = snippets.snippets[snippets.snippets.length - 1];
 
     if (lastSnippet && !lastSnippet.complete) {
       lastSnippet.code += line + '\n';
@@ -27,7 +27,7 @@ function addLineToLastSnippet (line) {
 }
 
 function endSnippet (snippets, fileName, lineNumber) {
-  let lastSnippet = snippets.snippets[snippets.snippets.length - 1];
+  const lastSnippet = snippets.snippets[snippets.snippets.length - 1];
 
   if (lastSnippet) {
     lastSnippet.complete = true;
@@ -69,25 +69,23 @@ function parseLine (line) {
 }
 
 function parseCodeSnippets (args) {
-  let contents = args.contents;
-  let fileName = args.fileName;
+  const contents = args.contents;
+  const fileName = args.fileName;
 
-  let initialState = {
+  const initialState = {
     snippets: [],
     preserveEnvironment: false,
     complete: false
-  }
+  };
 
-    function log (thing) { console.log(thing); return thing; }
-
-  let results = contents
+  const results = contents
     .split('\n')
     .map(parseLine)
     .reduce((snippets, lineAction, index) => lineAction(snippets, fileName, index + 1), initialState);
 
-  let codeSnippets = results.snippets;
+  const codeSnippets = results.snippets;
 
-  let lastSnippet = codeSnippets[codeSnippets.length - 1];
+  const lastSnippet = codeSnippets[codeSnippets.length - 1];
 
   if (lastSnippet && !lastSnippet.complete) {
     throw new Error('Snippet parsing was incomplete');
