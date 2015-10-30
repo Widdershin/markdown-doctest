@@ -3,7 +3,7 @@
 const fs = require('fs');
 const process = require('process');
 const vm = require('vm');
-const babel = require('babel-core');
+const babel = require('babel');
 
 const chalk = require('chalk');
 

@@ -1,20 +1,20 @@
 #! /usr/bin/env node
 'use strict';
 
-const doctest = require('../src/doctest');
+var doctest = require('../lib/doctest');
 
-const fs = require('fs');
-const process = require('process');
+var fs = require('fs');
+var process = require('process');
 
-const glob = require('glob');
+var glob = require('glob');
 
-const CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
-const DEFAULT_GLOB = '**/*.+(md|markdown)';
-const DEFAULT_IGNORE = ['node_modules/**'];
+var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
+var DEFAULT_GLOB = '**/*.+(md|markdown)';
+var DEFAULT_IGNORE = ['node_modules/**'];
 
 function main () {
-  const userGlob = process.argv[2];
-  let config = {require: {}};
+  var userGlob = process.argv[2];
+  var config = {require: {}};
 
   if (fs.existsSync(CONFIG_FILEPATH)) {
     try {
@@ -36,19 +36,18 @@ function main () {
       console.trace(err);
     }
 
-    const results = doctest.runTests(files, config);
+    var results = doctest.runTests(files, config);
 
     console.log('\n');
 
     doctest.printResults(results);
 
-    const failures = results.filter(result => result.status === 'fail');
+    var failures = results.filter(result => result.status === 'fail');
 
     if (failures.length > 0) {
       process.exitCode = 127;
     }
   }
 }
-
 
 main();
