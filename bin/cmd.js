@@ -4,7 +4,6 @@
 var doctest = require('../lib/doctest');
 
 var fs = require('fs');
-var process = require('process');
 
 var glob = require('glob');
 

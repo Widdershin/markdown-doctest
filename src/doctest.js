@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const process = require('process');
 const vm = require('vm');
 const babel = require('babel');
 
