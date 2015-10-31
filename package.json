@@ -3,7 +3,7 @@
   "version": "0.1.6",
   "description": "Test all the code in your markdown docs!",
   "main": "lib/doctest.js",
-  "files": ["lib", "src"],
+  "files": ["lib", "src", "bin"],
   "bin": {
     "markdown-doctest": "bin/cmd.js"
   },
