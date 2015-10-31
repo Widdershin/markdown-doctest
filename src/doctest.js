@@ -161,13 +161,9 @@ module.exports = {
 }
 
 function markDownErrorLocation (result) {
-  const stackLines = result.stack.split('\n');
+  const match = result.stack.match(/eval.*<.*>:(\d+):(\d+)/);
 
-  const evalStackLines = stackLines.filter(line => line.match(/eval/));
-
-  if (evalStackLines.length !== 0) {
-    const match = evalStackLines[0].match(/<.*>:(\d+):(\d+)/);
-
+  if (match) {
     const mdLineNumber = parseInt(match[1], 10);
     const columnNumber = parseInt(match[2], 10);
 
