@@ -42,7 +42,7 @@ function main () {
 
     doctest.printResults(results);
 
-    var failures = results.filter(result => result.status === 'fail');
+    var failures = results.filter(function (result) { return result.status === 'fail'; });
 
     if (failures.length > 0) {
       process.exitCode = 127;
