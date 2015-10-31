@@ -40,15 +40,15 @@ function makeTestSandbox (config) {
   return sandbox;
 }
 
-function testFile (config, preserveEnvironment) {
+function testFile (config, shareCodeInFile) {
   return function testFileWithConfig (args) {
     const codeSnippets = args.codeSnippets;
     const fileName = args.fileName;
-    const preserveEnvironment = args.preserveEnvironment;
+    const shareCodeInFile = args.shareCodeInFile;
 
     let results;
 
-    if (preserveEnvironment) {
+    if (shareCodeInFile) {
       const sandbox = makeTestSandbox(config);
       results = codeSnippets.map(test(config, fileName, sandbox));
     } else {

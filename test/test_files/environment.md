@@ -1,4 +1,4 @@
-<!-- environment -->
+<!-- share-code-between-examples -->
 
 This is a test to see if you can declare functions and then use them in later examples
 

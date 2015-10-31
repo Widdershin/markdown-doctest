@@ -2,8 +2,8 @@
 
 const isStartOfSnippet = line => line.trim().match(/```\W*(JavaScript|js|es6)/i);
 const isEndOfSnippet = line => line.trim() === '```';
-const isSkip = line => line.trim() === '<!-- skip-test -->';
-const isEnvironment = line => line.trim() === '<!-- environment -->';
+const isSkip = line => line.trim() === '<!-- skip-example -->';
+const isCodeSharedInFile = line => line.trim() === '<!-- share-code-between-examples -->';
 
 function startNewSnippet (snippets, fileName, lineNumber) {
   const skip = snippets.skip;
@@ -42,8 +42,8 @@ function skip (snippets) {
   return snippets;
 }
 
-function environment (snippets) {
-  snippets.preserveEnvironment = true;
+function shareCodeInFile (snippets) {
+  snippets.shareCodeInFile = true;
 
   return snippets;
 }
@@ -61,8 +61,8 @@ function parseLine (line) {
     return skip;
   }
 
-  if (isEnvironment(line)) {
-    return environment;
+  if (isCodeSharedInFile(line)) {
+    return shareCodeInFile;
   }
 
   return addLineToLastSnippet(line);
@@ -74,7 +74,7 @@ function parseCodeSnippets (args) {
 
   const initialState = {
     snippets: [],
-    preserveEnvironment: false,
+    shareCodeInFile: false,
     complete: false
   };
 
@@ -94,7 +94,7 @@ function parseCodeSnippets (args) {
   return {
     fileName,
     codeSnippets,
-    preserveEnvironment: results.preserveEnvironment
+    shareCodeInFile: results.shareCodeInFile
   };
 }
 

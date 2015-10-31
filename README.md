@@ -60,9 +60,9 @@ In your markdown files, anything inside of code blocks with 'js' or 'es6' will b
 
 I have a code example I don't want tested!
 ---
-You can tell `markdown-doctest` to skip examples by adding `<!-- skip-test -->` before the example. E.g:
+You can tell `markdown-doctest` to skip examples by adding `<!-- skip-example -->` before the example. E.g:
 
-    <!-- skip-test -->
+    <!-- skip-example -->
     ```js
     // not a runnable example
 
@@ -74,7 +74,7 @@ How do requires work? And other setup logic?
 
 You can `require` any needed modules or example helpers in `.markdown-doctest-setup.js`. E.g:
 
-<!-- skip-test -->
+<!-- skip-example -->
 ```js
 // .markdown-doctest-setup.js
 module.exports = {
@@ -98,7 +98,7 @@ Do I have to enable es6 support?
 
 Nope, ES6 support is on by default. You can configure babel in your `.markdown-doctest-setup.js`
 
-<!-- skip-test -->
+<!-- skip-example -->
 ```js
 //.markdown-doctest-setup.js
 module.exports = {
@@ -110,7 +110,7 @@ module.exports = {
 
 You can also disable `babel` support. This will speed things up drastically:
 
-<!-- skip-test -->
+<!-- skip-example -->
 ```js
 //.markdown-doctest-setup.js
 module.exports = {

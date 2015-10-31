@@ -1,4 +1,4 @@
-<!-- skip-test -->
+<!-- skip-example -->
 ```js
 	console.log("hey");
 ```
