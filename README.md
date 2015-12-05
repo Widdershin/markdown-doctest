@@ -93,6 +93,24 @@ You must explicitly configure all of the dependencies used in your examples.
 
 Anything exported under `globals` will be available globally across all examples.
 
+You can also specify a regexRequire section to handle anything more complex than an exact string match!
+
+<!-- skip-example -->
+```js
+// .markdown-doctest-setup.js
+module.exports = {
+  require: {
+    Rx: require('rx')
+  },
+
+  regexRequire: {
+    'rx/(.*)': function (fullPath, matchedModuleName) {
+      return require('./dist/' + matchedModuleName);
+    }
+  }
+}
+```
+
 Do I have to enable es6 support?
 ---
 
