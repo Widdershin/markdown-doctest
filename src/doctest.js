@@ -23,6 +23,17 @@ function read (fileName) {
 
 function makeTestSandbox (config) {
   function sandboxRequire (moduleName) {
+    for (let regexRequire in config.regexRequire) {
+      const regex = new RegExp(regexRequire);
+
+      const match = regex.exec(moduleName);
+      const handler = config.regexRequire[regexRequire];
+
+      if (match) {
+        return handler(...match);
+      }
+    }
+
     if (config.require[moduleName] === undefined) {
       throw moduleNotFoundError(moduleName);
     }

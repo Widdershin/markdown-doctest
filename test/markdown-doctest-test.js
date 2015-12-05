@@ -56,6 +56,7 @@ describe('runTests', () => {
         lodash: {range: () => []}
       }
     };
+
     const results = doctest.runTests(files, config);
 
     const passingResults = results.filter(result => result.status === 'pass');
@@ -112,6 +113,31 @@ describe('runTests', () => {
     const skippedResults = results.filter(result => result.status === 'skip');
 
     assert.equal(passingResults.length, 3, results[1].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
+
+  it('supports regex imports', () => {
+    const files = [getTestFilePath('require-override.md')];
+    const config = {
+      regexRequire: {
+        'lo(.*)': function (fullPath, matchedName) {
+          assert.equal(matchedName, 'dash');
+
+          return {
+            range: () => []
+          };
+        }
+      }
+    };
+
+    const results = doctest.runTests(files, config);
+
+    const passingResults = results.filter(result => result.status === 'pass');
+    const failingResults = results.filter(result => result.status === 'fail');
+    const skippedResults = results.filter(result => result.status === 'skip');
+
+    assert.equal(passingResults.length, 1, results[0].stack);
     assert.equal(failingResults.length, 0);
     assert.equal(skippedResults.length, 0);
   });
