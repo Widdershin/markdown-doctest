@@ -82,7 +82,7 @@ function test (config, filename, sandbox) {
     let stack = '';
 
     const defaultBabelOptions = {
-      presets: ['es2015']
+      presets: [es2015]
     };
 
     const babelOptions = Object.assign({}, defaultBabelOptions, config.babel || {});
