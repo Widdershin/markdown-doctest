@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/Widdershin/markdown-doctest",
   "devDependencies": {
+    "babel-cli": "^6.4.0",
     "mocha": "^2.3.3"
   },
   "dependencies": {
