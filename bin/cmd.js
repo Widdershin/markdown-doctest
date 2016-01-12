@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 'use strict';
 
-require('babel/register');
 var doctest = require('../lib/doctest');
 
 var fs = require('fs');

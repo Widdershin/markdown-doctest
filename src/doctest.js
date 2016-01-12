@@ -2,7 +2,8 @@
 
 const fs = require('fs');
 const vm = require('vm');
-const babel = require('babel');
+const babel = require('babel-core');
+import es2015 from 'babel-preset-es2015';
 
 const chalk = require('chalk');
 
@@ -81,8 +82,7 @@ function test (config, filename, sandbox) {
     let stack = '';
 
     const defaultBabelOptions = {
-      nonStandard: false,
-      ast: false
+      presets: ['es2015']
     };
 
     const babelOptions = Object.assign({}, defaultBabelOptions, config.babel || {});
