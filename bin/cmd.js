@@ -10,7 +10,7 @@ var glob = require('glob');
 
 var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
 var DEFAULT_GLOB = '**/*.+(md|markdown)';
-var DEFAULT_IGNORE = ['node_modules/**'];
+var DEFAULT_IGNORE = ['**/node_modules/**'];
 
 function main () {
   var userGlob = process.argv[2];
