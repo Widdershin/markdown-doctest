@@ -9,7 +9,7 @@
   },
   "scripts": {
     "precompile-lib": "rm -rf lib/ && mkdir -p lib",
-    "compile-lib": "babel src -d lib",
+    "compile-lib": "./node_modules/babel/bin/babel.js src -d lib",
     "test": "mocha --compilers js:babel/register",
     "autotest": "mocha --watch -R min",
     "prepublish": "npm run compile-lib"
