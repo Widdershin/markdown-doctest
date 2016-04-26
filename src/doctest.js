@@ -46,7 +46,7 @@ function makeTestSandbox (config) {
   };
 
   const sandboxGlobals = {require: sandboxRequire, console: sandboxConsole};
-  const sandbox = Object.assign({}, config.globals, sandboxGlobals);
+  const sandbox = Object.assign({}, sandboxGlobals, config.globals);
 
   return sandbox;
 }
