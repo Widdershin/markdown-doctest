@@ -144,6 +144,7 @@ Who uses markdown-doctest?
 All of these projects either run `markdown-doctest` with `npm test` or as part of their CI process:
 
 * [ReactiveX/RxJS (RxJS v5)](https://github.com/ReactiveX/RxJS)
+* [cujojs/most](https://github.com/cujojs/most)
 * [staltz/xstream](https://github.com/staltz/xstream)
 * [Reactive-Extensions/rx.schedulers](https://github.com/Reactive-Extensions/rx.schedulers)
 * [Reactive-Extensions/rx.priorityqueue](https://github.com/Reactive-Extensions/rx.priorityqueue)
