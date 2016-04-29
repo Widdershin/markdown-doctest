@@ -143,10 +143,11 @@ Who uses markdown-doctest?
 
 All of these projects either run `markdown-doctest` with `npm test` or as part of their CI process:
 
-* [ReactiveX/RxJS (RxJS v5)](https://github.com/ReactiveX/RxJS)
-* [cujojs/most](https://github.com/cujojs/most)
-* [staltz/xstream](https://github.com/staltz/xstream)
-* [Reactive-Extensions/rx.schedulers](https://github.com/Reactive-Extensions/rx.schedulers)
-* [Reactive-Extensions/rx.priorityqueue](https://github.com/Reactive-Extensions/rx.priorityqueue)
-* [Reactive-Extensions/rx.disposables](https://github.com/Reactive-Extensions/rx.disposables)
-* [Widdershin/rx-undoable](https://github.com/Widdershin/rx-undoable)
+* [lodash](https://github.com/lodash/lodash)
+* [RxJS](https://github.com/ReactiveX/RxJS)
+* [most](https://github.com/cujojs/most)
+* [xstream](https://github.com/staltz/xstream)
+* [rx.schedulers](https://github.com/Reactive-Extensions/rx.schedulers)
+* [rx.priorityqueue](https://github.com/Reactive-Extensions/rx.priorityqueue)
+* [rx.disposables](https://github.com/Reactive-Extensions/rx.disposables)
+* [rx-undoable](https://github.com/Widdershin/rx-undoable)
