@@ -94,6 +94,10 @@ function test (config, filename, sandbox) {
       perSnippetSandbox = makeTestSandbox(config);
     }
 
+    if (config.beforeEach) {
+      config.beforeEach();
+    }
+
     try {
       if (config.babel !== false) {
         code = babel.transform(codeSnippet.code, babelOptions).code;

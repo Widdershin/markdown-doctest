@@ -138,6 +138,20 @@ module.exports = {
 }
 ```
 
+What if I have global state that needs to be reset after my examples run?
+---
+<!-- skip-example -->
+```js
+//.markdown-doctest-setup.js
+module.exports = {
+  beforeEach: function () {
+    // reset your awesome global state
+  }
+}
+```
+
+You can specify a function to be run before each example in your `.markdown-doctest-setup.js`.
+
 Who uses markdown-doctest?
 ---
 
