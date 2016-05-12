@@ -3,7 +3,11 @@
   "version": "0.4.0",
   "description": "Test all the code in your markdown docs!",
   "main": "lib/doctest.js",
-  "files": ["lib", "src", "bin"],
+  "files": [
+    "lib",
+    "src",
+    "bin"
+  ],
   "bin": {
     "markdown-doctest": "bin/cmd.js"
   },
@@ -35,8 +39,8 @@
     "tape": "^4.2.2"
   },
   "dependencies": {
-    "babel": "^5.8.29",
+    "babel": "^6.5.2",
     "chalk": "^1.1.1",
-    "glob": "^5.0.15"
+    "glob": "^7.0.3"
   }
 }
