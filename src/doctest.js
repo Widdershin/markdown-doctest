@@ -4,6 +4,7 @@ const fs = require('fs');
 const vm = require('vm');
 const babel = require('babel-core');
 import es2015 from 'babel-preset-es2015';
+import stage0 from 'babel-preset-stage-0';
 
 const chalk = require('chalk');
 
@@ -81,11 +82,13 @@ function test (config, filename, sandbox) {
     let success = false;
     let stack = '';
 
-    const defaultBabelOptions = {
+    const babelOptions = {
       presets: [es2015]
     };
 
-    const babelOptions = Object.assign({}, defaultBabelOptions, config.babel || {});
+    if (config.babel && 'stage' in config.babel && config.babel.stage === 0) {
+      babelOptions.presets.push(stage0);
+    }
 
     let code = codeSnippet.code;
     let perSnippetSandbox;

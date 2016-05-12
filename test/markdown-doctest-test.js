@@ -168,4 +168,27 @@ describe('runTests', () => {
 
     assert.equal(a.value, 1);
   });
+
+  it('supports stage 0 examples', () => {
+    const files = [getTestFilePath('es7.md')];
+    const config = {
+      babel: {
+        stage: 0
+      },
+
+      require: {
+        assert
+      }
+    };
+
+    const results = doctest.runTests(files, config);
+
+    const passingResults = results.filter(result => result.status === 'pass');
+    const failingResults = results.filter(result => result.status === 'fail');
+    const skippedResults = results.filter(result => result.status === 'skip');
+
+    assert.equal(passingResults.length, 1, results[0].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
 });
