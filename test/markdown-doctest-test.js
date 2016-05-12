@@ -141,4 +141,31 @@ describe('runTests', () => {
     assert.equal(failingResults.length, 0);
     assert.equal(skippedResults.length, 0);
   });
+
+  it('runs the beforeEach hook prior to each example', () => {
+    const files = [getTestFilePath('before-each.md')];
+    const a = {
+      value: 0
+    }
+
+    const config = {
+      globals: {
+        a
+      },
+
+      beforeEach: () => a.value = 0
+    };
+
+    const results = doctest.runTests(files, config);
+
+    const passingResults = results.filter(result => result.status === 'pass');
+    const failingResults = results.filter(result => result.status === 'fail');
+    const skippedResults = results.filter(result => result.status === 'skip');
+
+    assert.equal(passingResults.length, 3, results[0].stack);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+
+    assert.equal(a.value, 1);
+  });
 });

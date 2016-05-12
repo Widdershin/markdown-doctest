@@ -11,6 +11,8 @@ Why on earth?
 
 As an open source developer, there are few things more embarassing than a user opening an issue to inform you that your README example is broken! With  `markdown-doctest`, you can rest easy knowing that your example code is *actually runnable*.
 
+Installation
+---
 Just `npm install markdown-doctest` and run `markdown-doctest`. It will run all of the Javascript code examples tucked away in your markdown, and let you know if any blow up.
 
 Okay, how do I use it?
@@ -136,3 +138,30 @@ module.exports = {
 }
 ```
 
+What if I have global state that needs to be reset after my examples run?
+---
+<!-- skip-example -->
+```js
+//.markdown-doctest-setup.js
+module.exports = {
+  beforeEach: function () {
+    // reset your awesome global state
+  }
+}
+```
+
+You can specify a function to be run before each example in your `.markdown-doctest-setup.js`.
+
+Who uses markdown-doctest?
+---
+
+All of these projects either run `markdown-doctest` with `npm test` or as part of their CI process:
+
+* [lodash](https://github.com/lodash/lodash)
+* [RxJS](https://github.com/ReactiveX/RxJS)
+* [most](https://github.com/cujojs/most)
+* [xstream](https://github.com/staltz/xstream)
+* [rx.schedulers](https://github.com/Reactive-Extensions/rx.schedulers)
+* [rx.priorityqueue](https://github.com/Reactive-Extensions/rx.priorityqueue)
+* [rx.disposables](https://github.com/Reactive-Extensions/rx.disposables)
+* [rx-undoable](https://github.com/Widdershin/rx-undoable)
