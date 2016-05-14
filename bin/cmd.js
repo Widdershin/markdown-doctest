@@ -19,8 +19,9 @@ function main () {
     try {
       config = require(CONFIG_FILEPATH);
     } catch (e) {
-      console.log('Error running setup:');
-      console.trace(e);
+      console.log('Error running .markdown-doctest-setup.js:');
+      console.error(e);
+      return;
     }
   }
 
