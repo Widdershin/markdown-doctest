@@ -1,0 +1,4 @@
+#! /usr/bin/env bash
+BASEDIR=$(dirname $0)
+
+$BASEDIR/../node_modules/.bin/istanbul cover $BASEDIR/cmd.js $*
