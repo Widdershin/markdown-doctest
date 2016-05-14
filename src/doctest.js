@@ -138,14 +138,16 @@ function printResults (results) {
     return failingCount === 0;
   }
 
-  console.log(`
-${chalk.green('Passed: ' + passingCount)}
-${chalk.yellow('Skipped: ' + skippingCount)}
-${chalk.red('Failed: ' + failingCount)}
-  `);
+  console.log(chalk.green('Passed: ' + passingCount));
+
+  if (skippingCount > 0) {
+    console.log(chalk.yellow('Skipped: ' + skippingCount));
+  }
 
   if (successfulRun()) {
-    console.log(chalk.green('Success!'));
+    console.log(chalk.green('\nSuccess!'));
+  } else {
+    console.log(chalk.red('Failed: ' + failingCount));
   }
 }
 
