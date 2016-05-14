@@ -75,7 +75,6 @@ function testFile (config, shareCodeInFile) {
 function test (config, filename, sandbox) {
   return (codeSnippet) => {
     if (codeSnippet.skip) {
-      process.stdout.write(chalk.yellow('s'));
       return {status: 'skip', codeSnippet, stack: ''};
     }
 
