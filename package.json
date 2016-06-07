@@ -37,7 +37,7 @@
   "devDependencies": {
     "babel-cli": "^6.4.0",
     "babel-plugin-transform-object-assign": "^6.3.13",
-    "mocha": "^2.3.3"
+    "mocha": "^2.5.0"
   },
   "dependencies": {
     "babel-core": "^6.4.0",
