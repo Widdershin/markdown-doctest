@@ -25,9 +25,11 @@ function main () {
     }
   }
 
+  var ignoredDirectories = config.ignore || [];
+
   glob(
     userGlob || DEFAULT_GLOB,
-    {ignore: DEFAULT_IGNORE},
+    {ignore: DEFAULT_IGNORE.concat(ignoredDirectories)},
     run
   );
 
