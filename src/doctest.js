@@ -152,7 +152,28 @@ function printResults (results) {
 
 function printFailure (result) {
   console.log(chalk.red(`Failed - ${markDownErrorLocation(result)}`));
-  console.log(relevantStackDetails(result.stack));
+
+  const stackDetails = relevantStackDetails(result.stack);
+
+  console.log(stackDetails);
+
+  const variableNotDefined = stackDetails.match(/(\w+) is not defined/);
+
+  if (variableNotDefined) {
+    const variableName = variableNotDefined[1];
+
+    console.log(`You can declare ${chalk.blue(variableName)} in the ${chalk.blue('globals')} section in ${chalk.grey('.markdown-doctest-setup.js')}`);
+
+    console.log(`
+For example:
+${chalk.grey('// .markdown-doctest-setup.js')}
+module.exports = {
+  globals: {
+    ${chalk.blue(variableName)}: ...
+  }
+}
+    `);
+  }
 }
 
 function relevantStackDetails (stack) {
@@ -169,8 +190,10 @@ function relevantStackDetails (stack) {
 function moduleNotFoundError (moduleName) {
   return new Error(`
 Attempted to require '${chalk.blue(moduleName)}' but was not found in config.
-You need to include it in the require section of your ${chalk.blue('.markdown-doctest-setup.js')} file.
+You need to include it in the require section of your ${chalk.grey('.markdown-doctest-setup.js')} file.
 
+For example:
+${chalk.grey('// .markdown-doctest-setup.js')}
 module.exports = {
   require: {
     ${chalk.blue(`'${moduleName}': require('${moduleName}')`)}
