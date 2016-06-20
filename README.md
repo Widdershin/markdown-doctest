@@ -158,6 +158,7 @@ Who uses markdown-doctest?
 All of these projects either run `markdown-doctest` with `npm test` or as part of their CI process:
 
 * [lodash](https://github.com/lodash/lodash)
+* [Moment](https://github.com/moment/momentjs.com)
 * [RxJS](https://github.com/ReactiveX/RxJS)
 * [most](https://github.com/cujojs/most)
 * [xstream](https://github.com/staltz/xstream)
