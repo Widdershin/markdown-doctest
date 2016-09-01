@@ -53,7 +53,7 @@ function makeTestSandbox (config) {
   return sandbox;
 }
 
-function testFile (config, shareCodeInFile) {
+function testFile (config) {
   return function testFileWithConfig (args) {
     const codeSnippets = args.codeSnippets;
     const fileName = args.fileName;
