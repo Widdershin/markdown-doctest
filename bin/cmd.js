@@ -9,11 +9,32 @@ var glob = require('glob');
 
 var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
 var DEFAULT_GLOB = '**/*.+(md|markdown)';
-var DEFAULT_IGNORE = ['**/node_modules/**', '**/bower_components/**'];
+var DEFAULT_IGNORE = [
+  '**/node_modules/**',
+  '**/bower_components/**'
+];
+
+function displayHelp () {
+  const helpText = [
+    'Usage: markdown-doctest [glob]',
+    'Options:',
+    '  -h, --help    output help text'
+  ];
+
+  console.log(helpText.join('\n'));
+}
 
 function main () {
   var userGlob = process.argv[2];
   var config = {require: {}};
+
+  if (process.argv.indexOf('--help') !== -1 || process.argv.indexOf('-h') !== -1) {
+    displayHelp();
+
+    process.exitCode = 0;
+
+    return;
+  }
 
   if (fs.existsSync(CONFIG_FILEPATH)) {
     try {
