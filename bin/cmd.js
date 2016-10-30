@@ -42,6 +42,7 @@ function main () {
     } catch (e) {
       console.log('Error running .markdown-doctest-setup.js:');
       console.error(e);
+      process.exitCode = 1;
       return;
     }
   }
@@ -68,7 +69,7 @@ function main () {
     var failures = results.filter(function (result) { return result.status === 'fail'; });
 
     if (failures.length > 0) {
-      process.exitCode = 127;
+      process.exitCode = 1;
     }
   }
 }
