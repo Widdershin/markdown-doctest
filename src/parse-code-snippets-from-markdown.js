@@ -1,6 +1,6 @@
 'use strict';
 
-const isStartOfSnippet = line => line.trim().match(/```\W*(JavaScript|js|es6)/i);
+const isStartOfSnippet = line => line.trim().match(/```\W*(JavaScript|js|es6)\s?$/i);
 const isEndOfSnippet = line => line.trim() === '```';
 const isSkip = line => line.trim() === '<!-- skip-example -->';
 const isCodeSharedInFile = line => line.trim() === '<!-- share-code-between-examples -->';

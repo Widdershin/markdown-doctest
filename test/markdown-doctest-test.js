@@ -191,4 +191,19 @@ describe('runTests', () => {
     assert.equal(failingResults.length, 0);
     assert.equal(skippedResults.length, 0);
   });
+
+  it('ignores json examples', () => {
+    const files = [getTestFilePath('json.md')];
+    const config = {};
+
+    const results = doctest.runTests(files, config);
+
+    const passingResults = results.filter(result => result.status === 'pass');
+    const failingResults = results.filter(result => result.status === 'fail');
+    const skippedResults = results.filter(result => result.status === 'skip');
+
+    assert.equal(passingResults.length, 0);
+    assert.equal(failingResults.length, 0);
+    assert.equal(skippedResults.length, 0);
+  });
 });
