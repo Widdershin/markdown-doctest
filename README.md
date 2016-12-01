@@ -162,6 +162,7 @@ All of these projects either run `markdown-doctest` with `npm test` or as part o
 * [RxJS](https://github.com/ReactiveX/RxJS)
 * [most](https://github.com/cujojs/most)
 * [xstream](https://github.com/staltz/xstream)
+* [cyclejs/time](https://github.com/cyclejs/time)
 * [rx.schedulers](https://github.com/Reactive-Extensions/rx.schedulers)
 * [rx.priorityqueue](https://github.com/Reactive-Extensions/rx.priorityqueue)
 * [rx.disposables](https://github.com/Reactive-Extensions/rx.disposables)
