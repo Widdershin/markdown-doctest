@@ -40,6 +40,8 @@ Failed - README.md:32:17
 evalmachine.<anonymous>:7
 console.log(a + c);
                 ^
+
+ReferenceError: c is not defined
 ```
 
 Awesome! No excuse for broken documentation ever again, right? :wink:
