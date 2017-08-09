@@ -1,11 +1,11 @@
 [![npm version](https://badge.fury.io/js/markdown-doctest.svg)](http://badge.fury.io/js/markdown-doctest)
 [![Build Status](https://travis-ci.org/Widdershin/markdown-doctest.svg?branch=master)](https://travis-ci.org/Widdershin/markdown-doctest)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Widdershin/markdown-doctest.svg)](https://greenkeeper.io/)
 
 * * *
 
 # markdown-doctest
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Widdershin/markdown-doctest.svg)](https://greenkeeper.io/)
 Test all the code in your markdown docs!
 
 Why on earth?
