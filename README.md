@@ -34,10 +34,12 @@ There's a problem with that example. `markdown-doctest` finds it for us:
 
 ```bash
 $ markdown-doctest
-Failed - README.md:27:17
-ReferenceError: c is not defined
+x..
 
-1/2 passing
+Failed - README.md:32:17
+evalmachine.<anonymous>:7
+console.log(a + c);
+                ^
 ```
 
 Awesome! No excuse for broken documentation ever again, right? :wink:
