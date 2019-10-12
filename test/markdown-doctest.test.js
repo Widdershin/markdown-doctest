@@ -1,11 +1,9 @@
 /* globals describe, it */
 'use strict';
 
-const path = require('path');
-
-const assert = require('assert');
-
-const doctest = require('../src/doctest');
+import path from 'path';
+import assert from 'assert';
+import * as doctest from '../src/doctest';
 
 const getTestFilePath = (testFile) => {
   return path.join(__dirname, '/test_files/', testFile);
@@ -167,29 +165,6 @@ describe('runTests', () => {
     assert.equal(skippedResults.length, 0);
 
     assert.equal(a.value, 1);
-  });
-
-  it('supports stage 0 examples', () => {
-    const files = [getTestFilePath('es7.md')];
-    const config = {
-      babel: {
-        stage: 0
-      },
-
-      require: {
-        assert
-      }
-    };
-
-    const results = doctest.runTests(files, config);
-
-    const passingResults = results.filter(result => result.status === 'pass');
-    const failingResults = results.filter(result => result.status === 'fail');
-    const skippedResults = results.filter(result => result.status === 'skip');
-
-    assert.equal(passingResults.length, 1, results[0].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
   });
 
   it('ignores json examples', () => {
