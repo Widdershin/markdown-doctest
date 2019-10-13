@@ -5,7 +5,10 @@ import { runInNewContext } from "vm";
 import { transformSync } from "@babel/core";
 import presetEnv from "@babel/preset-env";
 import chalk from "chalk";
-import flatten from "lodash/flatten";
+
+function flatten<T>(arr: T[][]): T[] {
+  return Array.prototype.concat.apply([], arr);
+}
 
 import parseCodeSnippets, {
   Snippet,
@@ -95,7 +98,7 @@ function testFile(config: Config) {
       results = codeSnippets.map(test(config, fileName));
     }
 
-    return flatten(results);
+    return results;
   };
 }
 

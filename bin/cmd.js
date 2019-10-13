@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 'use strict';
 
-var doctest = require('../lib/doctest');
+var doctest = require('..');
 
 var fs = require('fs');
 
