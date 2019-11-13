@@ -18,7 +18,7 @@ describe('runTests', () => {
 
     const passingResults = results.filter(result => result.status === 'pass');
 
-    assert.equal(passingResults.length, 1);
+    assert.strictEqual(passingResults.length, 1);
   });
 
   it('fail', () => {
@@ -29,8 +29,8 @@ describe('runTests', () => {
     const passingResults = results.filter(result => result.status === 'pass');
     const failingResults = results.filter(result => result.status === 'fail');
 
-    assert.equal(passingResults.length, 1, JSON.stringify(results, null, 2));
-    assert.equal(failingResults.length, 2);
+    assert.strictEqual(passingResults.length, 1, JSON.stringify(results, null, 2));
+    assert.strictEqual(failingResults.length, 2);
   });
 
   it('skip', () => {
@@ -42,9 +42,9 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 1);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 1);
+    assert.strictEqual(passingResults.length, 1);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 1);
   });
 
   it('config', () => {
@@ -61,9 +61,9 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 1, results[0].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 1, results[0].stack);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
   });
 
   it('globals', () => {
@@ -80,9 +80,9 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 1, results[0].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 1, results[0].stack);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
   });
 
   it('es6', () => {
@@ -95,9 +95,9 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 2, results[0].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 2, results[0].stack);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
   });
 
   it('joins tests', () => {
@@ -110,9 +110,9 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 3, results[1].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 3, results[1].stack);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
   });
 
   it('supports regex imports', () => {
@@ -120,7 +120,7 @@ describe('runTests', () => {
     const config = {
       regexRequire: {
         'lo(.*)': function (fullPath, matchedName) {
-          assert.equal(matchedName, 'dash');
+          assert.strictEqual(matchedName, 'dash');
 
           return {
             range: () => []
@@ -135,16 +135,16 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 1, results[0].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 1, results[0].stack);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
   });
 
   it('runs the beforeEach hook prior to each example', () => {
     const files = [getTestFilePath('before-each.md')];
     const a = {
       value: 0
-    }
+    };
 
     const config = {
       globals: {
@@ -160,11 +160,11 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 3, results[0].stack);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 3, results[0].stack);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
 
-    assert.equal(a.value, 1);
+    assert.strictEqual(a.value, 1);
   });
 
   it('ignores json examples', () => {
@@ -177,8 +177,8 @@ describe('runTests', () => {
     const failingResults = results.filter(result => result.status === 'fail');
     const skippedResults = results.filter(result => result.status === 'skip');
 
-    assert.equal(passingResults.length, 0);
-    assert.equal(failingResults.length, 0);
-    assert.equal(skippedResults.length, 0);
+    assert.strictEqual(passingResults.length, 0);
+    assert.strictEqual(failingResults.length, 0);
+    assert.strictEqual(skippedResults.length, 0);
   });
 });
