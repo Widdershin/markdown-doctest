@@ -1,77 +1,73 @@
 #! /usr/bin/env node
 'use strict';
 
-var doctest = require('..');
+const {version} = require('../package');
+const doctest = require('..');
+const program = require('commander');
+const path = require('path');
+const glob = require('glob');
+const fs = require('fs');
 
-var fs = require('fs');
-
-var glob = require('glob');
-
-var CONFIG_FILEPATH = process.cwd() + '/.markdown-doctest-setup.js';
-var DEFAULT_GLOB = '**/*.+(md|markdown)';
-var DEFAULT_IGNORE = [
+const DEFAULT_GLOB = '**/*.+(md|markdown)';
+const DEFAULT_IGNORE = [
   '**/node_modules/**',
   '**/bower_components/**'
 ];
 
-function displayHelp () {
-  const helpText = [
-    'Usage: markdown-doctest [glob]',
-    'Options:',
-    '  -h, --help    output help text'
-  ];
+// Config
+const config = {
+  require: {},
+  globals: {},
+  ignore: []
+};
 
-  console.log(helpText.join('\n'));
-}
+// Setup commander
+program
+  .name('markdown-doctest')
+  .description('Test all the code in your markdown docs!')
+  .version(version, '-v, --version', 'output the current version')
+  .helpOption('-h, --help', 'output usage informations')
+  .option('-c, --config <path>', 'custom config location', path.join(process.cwd(), '/.markdown-doctest-setup.js'))
+  .parse(process.argv);
 
-function main () {
-  var userGlob = process.argv[2];
-  var config = {require: {}};
+// Parse config file
+if (program.config) {
+  const configPath = path.resolve(program.config);
 
-  if (process.argv.indexOf('--help') !== -1 || process.argv.indexOf('-h') !== -1) {
-    displayHelp();
-
-    process.exitCode = 0;
-
-    return;
-  }
-
-  if (fs.existsSync(CONFIG_FILEPATH)) {
+  if (fs.existsSync(configPath)) {
     try {
-      config = require(CONFIG_FILEPATH);
+
+      // Apply custom settings
+      Object.assign(config, require(configPath));
     } catch (e) {
-      console.log('Error running .markdown-doctest-setup.js:');
-      console.error(e);
-      process.exitCode = 1;
-      return;
+      console.error(`Cannot resolve "${configPath}"`);
+      process.exit(1);
     }
   }
+}
 
-  var ignoredDirectories = config.ignore || [];
+// Resolve files
+glob(
+  program.args[0] || DEFAULT_GLOB,
+  {
+    ignore: [...config.ignore, ...DEFAULT_IGNORE]
+  },
+  (err, files) => {
 
-  glob(
-    userGlob || DEFAULT_GLOB,
-    {ignore: DEFAULT_IGNORE.concat(ignoredDirectories)},
-    run
-  );
-
-  function run (err, files) {
     if (err) {
       console.trace(err);
     }
 
-    var results = doctest.runTests(files, config);
+    // Run tests
+    const results = doctest.runTests(files, config);
 
     console.log('\n');
-
     doctest.printResults(results);
 
-    var failures = results.filter(function (result) { return result.status === 'fail'; });
-
+    // Exit with error-code if any test failed
+    const failures = results.filter(result => result.status === 'fail');
     if (failures.length > 0) {
-      process.exitCode = 1;
+      process.exit(1);
     }
   }
-}
-
-main();
+);
