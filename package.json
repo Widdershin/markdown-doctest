@@ -39,7 +39,7 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
-    "@babel/core": "^7.6.4",
+    "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.6.3",
     "chalk": "^2.4.2",
     "commander": "^4.0.1",
