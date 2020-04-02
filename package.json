@@ -41,7 +41,7 @@
   "dependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
-    "chalk": "^2.4.2",
+    "chalk": "^4.0.0",
     "commander": "^4.0.1",
     "glob": "^7.1.4"
   },
