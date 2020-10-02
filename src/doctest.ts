@@ -13,7 +13,7 @@ function flatten<T>(arr: T[][]): T[] {
 import parseCodeSnippets, {
   Snippet,
   ParsedFile,
-  FileInfo
+  FileInfo,
 } from "./parse-code-snippets-from-markdown";
 
 interface Config {
@@ -28,6 +28,7 @@ interface Config {
   };
   babel?: any;
   beforeEach?: () => any;
+  transformCode?: (code: string) => string;
 }
 
 interface Sandbox {
@@ -74,7 +75,7 @@ function makeTestSandbox(config: Config): Sandbox {
   }
 
   const sandboxConsole = {
-    log: () => null
+    log: () => null,
   };
 
   const sandboxGlobals = { require: sandboxRequire, console: sandboxConsole };
@@ -102,6 +103,8 @@ function testFile(config: Config) {
   };
 }
 
+const noop = (a) => a;
+
 function test(config: Config, filename: string, sandbox?: Sandbox) {
   return (codeSnippet: Snippet): TestResult => {
     if (codeSnippet.skip) {
@@ -111,7 +114,7 @@ function test(config: Config, filename: string, sandbox?: Sandbox) {
     let success = false;
     let stack = "";
 
-    let code = codeSnippet.code;
+    let code = (config.transformCode || noop)(codeSnippet.code);
     let perSnippetSandbox: Sandbox;
 
     if (sandbox === undefined) {
@@ -123,12 +126,12 @@ function test(config: Config, filename: string, sandbox?: Sandbox) {
     }
 
     const options = {
-      presets: [presetEnv]
+      presets: [presetEnv],
     };
 
     try {
       if (config.babel !== false) {
-        code = transformSync(codeSnippet.code, options).code;
+        code = transformSync(code, options).code;
       }
 
       runInNewContext(code, perSnippetSandbox || sandbox);
@@ -147,13 +150,13 @@ function test(config: Config, filename: string, sandbox?: Sandbox) {
 }
 
 export function printResults(results: TestResult[]) {
-  results.filter(result => result.status === "fail").forEach(printFailure);
+  results.filter((result) => result.status === "fail").forEach(printFailure);
 
-  const passingCount = results.filter(result => result.status === "pass")
+  const passingCount = results.filter((result) => result.status === "pass")
     .length;
-  const failingCount = results.filter(result => result.status === "fail")
+  const failingCount = results.filter((result) => result.status === "fail")
     .length;
-  const skippingCount = results.filter(result => result.status === "skip")
+  const skippingCount = results.filter((result) => result.status === "skip")
     .length;
 
   function successfulRun() {
@@ -186,9 +189,11 @@ function printFailure(result: TestResult) {
     const variableName = variableNotDefined[1];
 
     console.log(
-      `You can declare ${chalk.blue(variableName)} in the ${chalk.blue(
-        "globals"
-      )} section in ${chalk.grey(".markdown-doctest-setup.js")}`
+      `You can declare ${chalk.blue(variableName)} in the ${
+        chalk.blue(
+          "globals",
+        )
+      } section in ${chalk.grey(".markdown-doctest-setup.js")}`,
     );
 
     console.log(`
@@ -204,8 +209,7 @@ module.exports = {
 }
 
 function relevantStackDetails(stack: string) {
-  const match =
-    stack.match(/([\w\W]*?)at eval/) ||
+  const match = stack.match(/([\w\W]*?)at eval/) ||
     stack.match(/([\w\W]*)at [\w*\/]*?doctest.js/);
 
   if (match !== null) {
@@ -218,9 +222,11 @@ function relevantStackDetails(stack: string) {
 function moduleNotFoundError(moduleName: string) {
   return new Error(`
 Attempted to require '${chalk.blue(moduleName)}' but was not found in config.
-You need to include it in the require section of your ${chalk.grey(
-    ".markdown-doctest-setup.js"
-  )} file.
+You need to include it in the require section of your ${
+    chalk.grey(
+      ".markdown-doctest-setup.js",
+    )
+  } file.
 
 For example:
 ${chalk.grey("// .markdown-doctest-setup.js")}
