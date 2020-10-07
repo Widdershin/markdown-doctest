@@ -148,6 +148,20 @@ module.exports = {
 
 You can specify a function to be run before each example in your `.markdown-doctest-setup.js`.
 
+What if I want to remove custom syntax from examples before processing?
+---
+
+<!-- skip-example -->
+```js
+//.markdown-doctest-setup.js
+module.exports = {
+  transformCode(code) {
+    // Remove ... from code syntax
+    return code.replace(/\.\.\./g, "");
+  }
+}
+```
+
 Who uses markdown-doctest?
 ---
 
