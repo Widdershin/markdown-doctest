@@ -11,7 +11,7 @@ Test all the code in your markdown docs!
 Why on earth?
 ---
 
-As an open source developer, there are few things more embarassing than a user opening an issue to inform you that your README example is broken! With  `markdown-doctest`, you can rest easy knowing that your example code is *actually runnable*.
+As an open source developer, there are few things more embarrassing than a user opening an issue to inform you that your README example is broken! With  `markdown-doctest`, you can rest easy knowing that your example code is *actually runnable*.
 
 Installation
 ---
