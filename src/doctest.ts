@@ -103,8 +103,6 @@ function testFile(config: Config) {
   };
 }
 
-const noop = (a) => a;
-
 function test(config: Config, filename: string, sandbox?: Sandbox) {
   return (codeSnippet: Snippet): TestResult => {
     if (codeSnippet.skip) {
@@ -114,7 +112,16 @@ function test(config: Config, filename: string, sandbox?: Sandbox) {
     let success = false;
     let stack = "";
 
-    let code = (config.transformCode || noop)(codeSnippet.code);
+    let code = codeSnippet.code;
+
+    if (config.transformCode) {
+      try {
+        code = config.transformCode(code);
+      } catch (e) {
+        return { status: "fail", codeSnippet, stack: "Encountered an error while transforming snippet: \n" + e.stack };
+      }
+    }
+
     let perSnippetSandbox: Sandbox;
 
     if (sandbox === undefined) {
